@@ -16,8 +16,32 @@
   <div>
     <ion-grid>
       <ion-row *ngFor="let row of dataArray">
-        <ion-col *ngFor="let title of row">
-          {{title}}
+        <ion-col size="0.6">
+          {{row.serial}}
+        </ion-col>
+        <ion-col size="0.6">
+          {{row.ward}}
+        </ion-col>
+        <ion-col size="1">
+          {{row.service}}
+        </ion-col>
+        <ion-col size="1.5">
+          {{row.hospital}}
+        </ion-col>
+        <ion-col size="2.5">
+          {{row.address}}
+        </ion-col>
+        <ion-col size="1">
+          {{row.beds}}
+        </ion-col>
+        <ion-col size="1.5">
+          {{row.name}}
+        </ion-col>
+        <ion-col size="1.5">
+          {{row.contact}}
+        </ion-col>
+        <ion-col size="1.5">
+          {{row.email}}
         </ion-col>
       </ion-row>
       </ion-grid>
