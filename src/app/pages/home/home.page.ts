@@ -46,6 +46,7 @@ export class HomePage {
               }
             }
           }
+          this.dataArray.shift(); 
           //console.log(this.dataArray)
         },
         (err: HttpErrorResponse) => {
@@ -56,6 +57,10 @@ export class HomePage {
           }
         }
       );
+   }
+
+   openHospitalDetails(data: Hospital) {
+    console.log(data)
    }
 
    getHospital(objArr: String[]): Hospital {

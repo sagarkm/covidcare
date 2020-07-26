@@ -21,38 +21,49 @@
     </ion-toolbar>
   </ion-header>
 
-  <div>
-    <ion-grid>
-      <ion-row *ngFor="let row of dataArray">
-        <ion-col size="0.6">
-          {{row.serial}}
-        </ion-col>
-        <ion-col size="0.6">
-          {{row.ward}}
-        </ion-col>
-        <ion-col size="1">
-          {{row.service}}
-        </ion-col>
-        <ion-col size="1.5">
-          {{row.hospital}}
-        </ion-col>
-        <ion-col size="2.5">
-          {{row.address}}
-        </ion-col>
-        <ion-col size="1">
-          {{row.beds}}
-        </ion-col>
-        <ion-col size="1.5">
-          {{row.name}}
-        </ion-col>
-        <ion-col size="1.5">
-          {{row.contact}}
-        </ion-col>
-        <ion-col size="1.5">
-          {{row.email}}
-        </ion-col>
-      </ion-row>
-      </ion-grid>
-      
-  </div>
+    <ion-list lines="none" *ngFor="let row of dataArray" (click)="openHospitalDetails(row)">
+      <ion-card >
+        <ion-item>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="10">
+                {{row.hospital}}
+              </ion-col>
+              <ion-col size="2">
+                <div class="ion-text-end">
+                {{row.service}} - {{row.ward}}
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="8">
+                {{row.address}}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-icon name="medkit-outline" class="icon"> </ion-icon>
+                <span class="text">{{row.name}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="1.5">
+                <ion-icon name="bed-outline" class="icon"></ion-icon>
+                <span class="text">{{row.beds}}</span>
+              </ion-col>
+              <ion-col size="6">
+                <ion-icon name="mail-outline" class="icon"></ion-icon>
+                <span class="text">{{row.email}}</span>
+              </ion-col>
+              <ion-col>
+                <div class="ion-text-end">
+                <ion-icon name="call-outline" class="icon"></ion-icon>
+                <span class="text ion-text-end">{{row.contact}}</span>
+              </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-card>
+    </ion-list>
 </ion-content>
