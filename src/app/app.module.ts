@@ -10,9 +10,9 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { ProviderService } from './provider/provider.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AppGlobals } from './globals/app.global';
+import { ApiService } from './provider/api.service';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { AppGlobals } from './globals/app.global';
   providers: [
     StatusBar,
     SplashScreen,
-    ProviderService,
+    ApiService,
     AppGlobals,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

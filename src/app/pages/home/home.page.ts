@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ProviderService } from 'src/app/provider/provider.service';
 import { AppGlobals } from 'src/app/globals/app.global';
 import { Hospitals, Entry } from 'src/app/models/hospitalmodel';
 import { Hospital } from 'src/app/models/hospitaldatamodel';
 import { IonContent } from '@ionic/angular';
+import { LoadingService } from 'src/app/provider/loading.service';
+import { ApiService } from 'src/app/provider/api.service';
 
 @Component({
   selector: 'app-home',
@@ -19,9 +20,14 @@ export class HomePage {
   searchArray: Hospital[] = [];
   isSearchOn: Boolean = false;
 
-  constructor(public restProvider: ProviderService, private global: AppGlobals) {}
+  constructor(
+    public loadingProvider: LoadingService,
+    public restProvider: ApiService, 
+    private global: AppGlobals
+  ) {}
 
   ionViewDidEnter() {
+    this.loadingProvider.showLoader()
     this.restProvider
       .getData(this.global.HOSPITALS)
       .subscribe(
@@ -52,6 +58,7 @@ export class HomePage {
             }
           }
           this.dataArray.shift(); 
+          this.loadingProvider.hideLoader()
           //console.log(this.dataArray)
         },
         (err: HttpErrorResponse) => {

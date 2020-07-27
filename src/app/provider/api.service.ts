@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, catchError, retryWhen, tap, map } from 'rxjs/operators';
+import { retry, catchError, map } from 'rxjs/operators';
 import { AppGlobals } from '../globals/app.global';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProviderService {
+export class ApiService {
 
   constructor(private http: HttpClient, private global: AppGlobals) { }
 
@@ -44,5 +44,4 @@ export class ProviderService {
         })
       )
   }
-
 }
