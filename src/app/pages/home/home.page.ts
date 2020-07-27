@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProviderService } from 'src/app/provider/provider.service';
 import { AppGlobals } from 'src/app/globals/app.global';
-import { Hospitals, Feed, Entry, GsCell } from 'src/app/models/hospitalmodel';
+import { Hospitals, Entry } from 'src/app/models/hospitalmodel';
 import { Hospital } from 'src/app/models/hospitaldatamodel';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +12,12 @@ import { Hospital } from 'src/app/models/hospitaldatamodel';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
+  
+  @ViewChild(IonContent) content: IonContent;
+  
   dataArray: Hospital[] = [];
+  searchArray: Hospital[] = [];
+  isSearchOn: Boolean = false;
 
   constructor(public restProvider: ProviderService, private global: AppGlobals) {}
 
@@ -107,4 +112,19 @@ export class HomePage {
     }
     return hospitalObj
    }
+
+   getSearchItems(event: any) {
+    this.searchArray = this.dataArray
+    let searchText = event.target.value;
+    if (searchText && searchText.trim() !== '') {
+        this.isSearchOn = true
+        this.searchArray = this.searchArray.filter((item: Hospital) => {
+        return (item.hospital.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
+      })
+    } else {
+      this.isSearchOn = false
+      this.content.scrollToTop();
+      this.searchArray = []
+    }
+  }
 }
