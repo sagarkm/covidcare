@@ -36,56 +36,61 @@ export class HomePage {
     this.getHospitalsData()
   }
 
-   openHospitalDetails(data: Hospital) {
+  ngOnDestroy() {
+    this.dataArray = []
+    this.searchArray = []
+  }
+
+  openHospitalDetails(data: Hospital) {
     console.log(data)
-   }
+  }
 
-   getHospital(objArr: String[]): Hospital {
-    var hospitalObj: Hospital = { serial: "", ward: "", service: "", hospital: "", address: "", pincode: "", latlong: "", beds: "", name: "", contact: "", email: ""}
-    for (var val of objArr) {
-      let key = val[0].charAt(0);
-      switch (key) {
-        case "A":
-          hospitalObj.serial = val[1]
-          break;
-        case "B":
-          hospitalObj.ward = val[1]
-          break;
-        case "C":
-          hospitalObj.service = val[1]
-          break;
-        case "D":
-          hospitalObj.hospital = val[1]
-          break;
-        case "E":
-          hospitalObj.address = val[1]
-          break;
-        case "F":
-          hospitalObj.pincode = val[1]
-          break;
-        case "G":
-          hospitalObj.latlong = val[1]
-          break;
-        case "H":
-          hospitalObj.beds = val[1]
-          break;
-        case "I":
-          hospitalObj.name = val[1]
-          break;
-        case "J":
-          hospitalObj.contact = val[1]
-          break;
-        case "K":
-          hospitalObj.email = val[1]
-          break;
-        default:
-          break;
-      }
+  getHospital(objArr: String[]): Hospital {
+  var hospitalObj: Hospital = { serial: "", ward: "", service: "", hospital: "", address: "", pincode: "", latlong: "", beds: "", name: "", contact: "", email: ""}
+  for (var val of objArr) {
+    let key = val[0].charAt(0);
+    switch (key) {
+      case "A":
+        hospitalObj.serial = val[1]
+        break;
+      case "B":
+        hospitalObj.ward = val[1]
+        break;
+      case "C":
+        hospitalObj.service = val[1]
+        break;
+      case "D":
+        hospitalObj.hospital = val[1]
+        break;
+      case "E":
+        hospitalObj.address = val[1]
+        break;
+      case "F":
+        hospitalObj.pincode = val[1]
+        break;
+      case "G":
+        hospitalObj.latlong = val[1]
+        break;
+      case "H":
+        hospitalObj.beds = val[1]
+        break;
+      case "I":
+        hospitalObj.name = val[1]
+        break;
+      case "J":
+        hospitalObj.contact = val[1]
+        break;
+      case "K":
+        hospitalObj.email = val[1]
+        break;
+      default:
+        break;
     }
-    return hospitalObj
-   }
+  }
+  return hospitalObj
+  }
 
-   getSearchItems(event: any) {
+  getSearchItems(event: any) {
     this.searchArray = this.dataArray
     let searchText = event.target.value;
     if (searchText && searchText.trim() !== '') {

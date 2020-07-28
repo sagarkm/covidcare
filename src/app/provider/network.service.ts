@@ -7,18 +7,25 @@ import { AlertService } from './alert.service';
 })
 export class NetworkService {
   
-  disconnectSubscription: any;
-  connectSubscription: any;
+  lastnetworkType: boolean = true
+  disconnectSubscription: any
+  connectSubscription: any
 
   constructor(private network: Network, private alert: AlertService) { }
-
+    
   registerNetworkEvents() {
     this.disconnectSubscription = this.network.onDisconnect().subscribe(() => {
-      this.alert.presentNonetworkAlert(false)
+      if(this.lastnetworkType == true) {
+        this.lastnetworkType = false
+        this.alert.presentNonetworkAlert(false)
+      }
     });
 
     this.connectSubscription = this.network.onConnect().subscribe(() => {
-      this.alert.presentNonetworkAlert(true)
+      if(this.lastnetworkType == false) {
+        this.lastnetworkType = true
+        this.alert.presentNonetworkAlert(true)
+      }
     });
   }
 
