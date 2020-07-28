@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertService } from 'src/app/provider/alert.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,24 +8,16 @@ import { AlertController } from '@ionic/angular';
 })
 export class DashboardPage implements OnInit {
 
-  constructor(public alertController: AlertController) { }
+  constructor(private alert: AlertService) { }
 
   ngOnInit() {
   }
 
   cityClicked() {
-    this.presentAlert()
+    this.alert.presentAlert('Currently we support only Mumbai!!')
   }
 
-  async presentAlert() {
-    const alert = await this.alertController.create({
-      header: 'Notification',
-      message: 'Currently we support only Mumbai!!',
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
+  
 
 
 }

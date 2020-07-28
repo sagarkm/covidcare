@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { AppGlobals } from './globals/app.global';
 import { ApiService } from './provider/api.service';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ApiService } from './provider/api.service';
     SplashScreen,
     ApiService,
     AppGlobals,
+    Network,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

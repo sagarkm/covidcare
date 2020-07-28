@@ -28,6 +28,10 @@
       <ion-title size="large">Hospitals List</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-refresher slot="fixed" (ionRefresh)="listRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <img *ngIf="isSearchOn && searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"  style="align-items: center">
   <div *ngIf="!isSearchOn">
     <ion-list lines="none" *ngFor="let row of dataArray" (click)="openHospitalDetails(row)">
       <ion-card >
@@ -88,13 +92,11 @@
         <ion-item>
           <ion-grid>
             <ion-row>
-              <ion-col>
+              <ion-col size="8">
                 {{row.hospital}}
               </ion-col>
               <ion-col>
-                <div class="ion-text-end">
-                {{row.service}} - {{row.ward}}
-                </div>
+                  {{row.service}} - {{row.ward}}
               </ion-col>
             </ion-row>
             <ion-row>
@@ -103,14 +105,16 @@
               </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col size="0.7">
-                  <ion-icon name="medkit-outline" class="icon"> </ion-icon>
-                </ion-col>
-                <ion-col>
-                  <span class="text">{{row.name}}</span>
-                </ion-col>
-              <ion-col size="2">
+              <ion-col size="0.7">
+                <ion-icon name="medkit-outline" class="icon"> </ion-icon>
+              </ion-col>
+              <ion-col size="6">
+                <span class="text">{{row.name}}</span>
+              </ion-col>
+              <ion-col size="0.7">
                 <ion-icon name="bed-outline" class="icon"></ion-icon>
+              </ion-col>
+              <ion-col>
                 <span class="text">{{row.beds}}</span>
               </ion-col>
             </ion-row>
@@ -136,5 +140,4 @@
       </ion-card>
     </ion-list>
   </div>
- 
 </ion-content>

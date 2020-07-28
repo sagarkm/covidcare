@@ -6,6 +6,8 @@ import { Hospital } from 'src/app/models/hospitaldatamodel';
 import { IonContent } from '@ionic/angular';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
+import { AlertService } from 'src/app/provider/alert.service';
+import { NetworkService } from 'src/app/provider/network.service';
 
 @Component({
   selector: 'app-home',
@@ -23,52 +25,14 @@ export class HomePage {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService, 
-    private global: AppGlobals
+    private alert: AlertService,
+    private global: AppGlobals,
+    private network: NetworkService
   ) {}
 
   ionViewDidEnter() {
-    this.loadingProvider.showLoader()
-    this.restProvider
-      .getData(this.global.HOSPITALS)
-      .subscribe(
-        (data: Hospitals) => {
-          let entryArr: Entry[] = data.feed.entry; 
-          let currentRow: number = 1; 
-          let titleData = [];
-          for (var val of entryArr) {
-            if(Number(val.gs$cell.row) == currentRow) {
-              titleData.push([val.title.$t, val.gs$cell.inputValue]);
-            } else {
-              this.dataArray.push(this.getHospital(titleData))
-              currentRow += 1
-              break;
-            }
-          }
-          let rowData = []
-          for (var val of entryArr) {
-            if(Number(val.gs$cell.row) > 1 && currentRow == Number(val.gs$cell.row)) {
-              rowData.push([val.title.$t, val.gs$cell.inputValue]);
-            } else {
-              if(Number(val.gs$cell.row) > 1) {
-                this.dataArray.push(this.getHospital(rowData))
-                rowData = []
-                rowData.push([val.title.$t, val.gs$cell.inputValue]);
-                currentRow += 1
-              }
-            }
-          }
-          this.dataArray.shift(); 
-          this.loadingProvider.hideLoader()
-          //console.log(this.dataArray)
-        },
-        (err: HttpErrorResponse) => {
-          if (err.error instanceof ErrorEvent) {
-            console.error('An error occurred:', err.error.message);
-          } else {
-            console.error(`Backend returned code "${err.status}", with status "${err.statusText}"`);
-          }
-        }
-      );
+    this.network.registerNetworkEvents()
+    this.getHospitalsData()
    }
 
    openHospitalDetails(data: Hospital) {
@@ -133,5 +97,63 @@ export class HomePage {
       this.content.scrollToTop();
       this.searchArray = []
     }
+  }
+
+  getHospitalsData(event?: any) {
+    if(!event) {
+      this.loadingProvider.showLoader()
+    }
+    this.dataArray = []
+    this.restProvider
+      .getData(this.global.HOSPITALS)
+      .subscribe(
+        (data: Hospitals) => {
+          let entryArr: Entry[] = data.feed.entry; 
+          let currentRow: number = 1; 
+          let titleData = [];
+          for (var val of entryArr) {
+            if(Number(val.gs$cell.row) == currentRow) {
+              titleData.push([val.title.$t, val.gs$cell.inputValue]);
+            } else {
+              this.dataArray.push(this.getHospital(titleData))
+              currentRow += 1
+              break;
+            }
+          }
+          let rowData = []
+          for (var val of entryArr) {
+            if(Number(val.gs$cell.row) > 1 && currentRow == Number(val.gs$cell.row)) {
+              rowData.push([val.title.$t, val.gs$cell.inputValue]);
+            } else {
+              if(Number(val.gs$cell.row) > 1) {
+                this.dataArray.push(this.getHospital(rowData))
+                rowData = []
+                rowData.push([val.title.$t, val.gs$cell.inputValue]);
+                currentRow += 1
+              }
+            }
+          }
+          this.dataArray.shift(); 
+          if(event) {
+            event.target.complete();
+          } else {
+            this.loadingProvider.hideLoader()
+          }
+          //console.log(this.dataArray)
+        },
+        (err: HttpErrorResponse) => {
+          if(event) {
+            event.target.complete();
+          } else {
+            this.loadingProvider.hideLoader()
+          }
+          this.alert.presentAlert(err.error.message)
+ 
+        }
+      );
+  }
+
+  listRefresh(event: any) {
+    this.getHospitalsData(event);
   }
 }

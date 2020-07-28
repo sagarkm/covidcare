@@ -1,5 +1,7 @@
 {
   "name": "covidcare",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
