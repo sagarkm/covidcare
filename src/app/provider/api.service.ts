@@ -30,7 +30,6 @@ export class ApiService {
   
   // Get Data
   getData(endpointUrl: string): Observable<any> {
-    alert(this.network.getNetworkStatus())
     if (this.platform.is('hybrid') && this.network.getNetworkStatus() == 'none') {
       return new Observable(observer => {
         setTimeout(() => {

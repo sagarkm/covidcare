@@ -7,7 +7,8 @@ import { IonContent } from '@ionic/angular';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
-import { NetworkService } from 'src/app/provider/network.service';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 @Component({
   selector: 'app-home',
@@ -27,13 +28,13 @@ export class HomePage {
     public restProvider: ApiService, 
     private alert: AlertService,
     private global: AppGlobals,
-    private network: NetworkService
+    private callNumber: CallNumber,
+    private emailComposer: EmailComposer
   ) {}
 
-  ionViewDidEnter() {
-    this.network.registerNetworkEvents()
+  ngOnInit() {
     this.getHospitalsData()
-   }
+  }
 
    openHospitalDetails(data: Hospital) {
     console.log(data)
@@ -155,5 +156,40 @@ export class HomePage {
 
   listRefresh(event: any) {
     this.getHospitalsData(event);
+  }
+
+  openNumber(event: Event, data: string) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.alert.presentConfirmDialog('Are you sure you want to call this number?').then((resp) => {
+      if(resp) {
+        this.callNumber.callNumber(data, false)
+        .then(res => console.log('Launched dialer!', res))
+        .catch(err => console.log('Error launching dialer', err));
+      } 
+    });
+  }
+
+  openEmail(event: Event, data: string) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    this.alert.presentConfirmDialog('Are you sure you want to send the email?').then((resp) => {
+      if(resp) {
+        this.emailComposer.hasAccount().then((isValid: boolean) => {
+          if(isValid) {
+            let email = {
+              to: data,
+              subject: 'Covid Care',
+              body: '',
+              isHtml: true
+            }
+            
+            // Send a text message using default options
+            this.emailComposer.open(email);
+          }
+         });
+      } 
+    });
   }
 }

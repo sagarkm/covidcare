@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'src/app/provider/alert.service';
+import { NetworkService } from 'src/app/provider/network.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,16 +9,17 @@ import { AlertService } from 'src/app/provider/alert.service';
 })
 export class DashboardPage implements OnInit {
 
-  constructor(private alert: AlertService) { }
+  constructor(
+      private alert: AlertService, 
+      private network: NetworkService,
+    ) { }
 
   ngOnInit() {
+    this.network.registerNetworkEvents()
   }
 
   cityClicked() {
-    this.alert.presentAlert('Currently we support only Mumbai!!')
+    this.alert.presentAlert('Currently we support only Mumbai !!')
   }
-
-  
-
 
 }

@@ -14,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppGlobals } from './globals/app.global';
 import { ApiService } from './provider/api.service';
 import { Network } from '@ionic-native/network/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 
 @NgModule({
@@ -32,6 +34,8 @@ import { Network } from '@ionic-native/network/ngx';
     ApiService,
     AppGlobals,
     Network,
+    CallNumber,
+    EmailComposer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
