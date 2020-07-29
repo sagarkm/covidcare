@@ -39,8 +39,13 @@ export class HomePage {
     this.getHospitalsData()
   }
 
+  ngOnDestroy() {
+    this.dataArray = []
+    this.searchArray = []
+  }
+
   openHospitalDetails(data: Hospital) {
-    console.log("Hospital details = ", data);
+    console.log(data)
   }
 
   getHospital(objArr: String[]): Hospital {

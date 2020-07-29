@@ -8,7 +8,7 @@ import { NetworkService } from 'src/app/provider/network.service';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-
+  
   constructor(
       private alert: AlertService, 
       private network: NetworkService,
@@ -16,6 +16,10 @@ export class DashboardPage implements OnInit {
 
   ngOnInit() {
     this.network.registerNetworkEvents()
+  }
+
+  ngOnDestroy() {
+    this.network.closeNetworkEvents()
   }
 
   cityClicked() {
