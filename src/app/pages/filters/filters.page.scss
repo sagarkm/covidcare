@@ -1,0 +1,25 @@
+.filters {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 100%;
+
+  .columnContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .filterTypes {
+    border-right: 1px solid #cccccc;
+  }
+
+  ion-list {
+    padding: 0;
+  }
+
+  .selectedFilter {
+    --background: #e8f5fb;
+  }
+
+}

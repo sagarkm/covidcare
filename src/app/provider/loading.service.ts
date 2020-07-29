@@ -5,25 +5,27 @@ import { LoadingController } from '@ionic/angular';
   providedIn: 'root'
 })
 export class LoadingService {
+  loading: any;
 
   constructor(public loadingController: LoadingController) { }
 
-  showLoader() {
-    this.loadingController.create({
+  async showLoader() {
+    this.loading = await this.loadingController.create({
       message: 'Please wait...',
       translucent: true,
       backdropDismiss: true
-    }).then((res) => {
-      res.present();
     });
+
+    await this.loading.present();
 
   }
 
   hideLoader() {
-    this.loadingController.dismiss().then((res) => {
-      console.log('Loading dismissed!', res);
-    }).catch((error) => {
-      console.log('error', error);
-    });
+    this.loading.dismiss();
+    // this.loadingController.dismiss().then((res) => {
+    //   console.log('Loading dismissed!', res);
+    // }).catch((error) => {
+    //   console.log('error', error);
+    // });
   }
 }

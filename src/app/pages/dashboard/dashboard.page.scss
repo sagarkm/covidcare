@@ -1,7 +1,17 @@
-.img-wrapper {
-  width: 100px;
-  height: 100px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  margin-left: 20%;
+ion-col {
+  padding: 10px;
+}
+
+.menu-card {
+  text-align: center;
+
+  .card-image {
+    width: 90%;
+    margin: auto;
+  }
+
+  .card-title {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 }
