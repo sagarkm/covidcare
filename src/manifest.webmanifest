@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "Covid Care",
+  "short_name": "Covid Care",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

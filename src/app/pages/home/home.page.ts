@@ -204,7 +204,7 @@ export class HomePage {
             }
           });
         } else {
-          window.open(`mailto://${data}?subject=Covid%20Care`)
+          window.open(`mailto:${data}?subject=Covid%20Care`)
         }
       }
     });
