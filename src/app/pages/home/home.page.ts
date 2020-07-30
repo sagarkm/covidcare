@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AppGlobals } from 'src/app/globals/app.global';
 import { Hospitals, Entry } from 'src/app/models/hospitalmodel';
 import { Hospital } from 'src/app/models/hospitaldatamodel';
-import { IonContent, ModalController } from '@ionic/angular';
+import { IonContent, ModalController, Platform } from '@ionic/angular';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
@@ -22,7 +22,9 @@ export class HomePage {
 
   dataArray: Hospital[] = [];
   searchArray: Hospital[] = [];
+  filterArray: Hospital[] = [];
   filterItems: object[] = [];
+  isFilterOn: boolean = false
 
   constructor(
     public loadingProvider: LoadingService,
@@ -31,7 +33,8 @@ export class HomePage {
     private global: AppGlobals,
     private callNumber: CallNumber,
     private emailComposer: EmailComposer,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private platform: Platform
   ) { }
 
   ngOnInit() {
@@ -93,7 +96,11 @@ export class HomePage {
   }
 
   async getSearchItems(event: any) {
-    this.searchArray = this.dataArray
+    if(this.isFilterOn) {
+      this.searchArray = this.filterArray
+    } else {
+      this.searchArray = this.dataArray
+    }
     let searchText = event.target.value;
     await this.loadingProvider.showLoader();
     if (searchText && searchText.trim() !== '') {
@@ -168,30 +175,35 @@ export class HomePage {
     event.stopPropagation()
     this.alert.presentConfirmDialog('Are you sure you want to call this number?').then((resp) => {
       if (resp) {
+        if(this.platform.is("hybrid")) {
         this.callNumber.callNumber(data, false)
           .then(res => console.log('Launched dialer!', res))
           .catch(err => console.log('Error launching dialer', err));
+        } else {
+          window.open(`tel://${{data}}`)
+        }
       }
     });
-  }
+  } 
 
   openEmail(event: Event, data: string) {
     event.preventDefault()
     event.stopPropagation()
-
     this.alert.presentConfirmDialog('Are you sure you want to send the email?').then((resp) => {
       if (resp) {
         this.emailComposer.hasAccount().then((isValid: boolean) => {
           if (isValid) {
-            let email = {
-              to: data,
-              subject: 'Covid Care',
-              body: '',
-              isHtml: true
+            if(this.platform.is("hybrid")) {
+              let email = {
+                to: data,
+                subject: 'Covid Care',
+                body: '',
+                isHtml: true
+              }
+              this.emailComposer.open(email);
+            } else {
+              window.open(`mailto://${{data}}?subject=Covid%20Care`)
             }
-
-            // Send a text message using default options
-            this.emailComposer.open(email);
           }
         });
       }
@@ -212,10 +224,11 @@ export class HomePage {
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.filterItems = data.filterData
-      this.searchArray = []
       var hospitalArrayByWard: Hospital[]
       var hospitalArray: Hospital[]
       if (data.filterData.length > 0) {
+        this.searchArray = []
+        this.isFilterOn = true
         var ward = this.filterItems.filter(vendor => vendor['filterType'] === "ward")
         if(ward.length > 0) {
           hospitalArrayByWard = this.filterRecordsByType(ward, this.dataArray)
@@ -223,11 +236,15 @@ export class HomePage {
         var service = this.filterItems.filter(vendor => vendor['filterType'] === "service")
         if(service.length > 0) {
           hospitalArray = this.filterRecordsByType(service, hospitalArrayByWard ? hospitalArrayByWard : this.dataArray)
+          this.filterArray = hospitalArray
           this.searchArray = hospitalArray
         } else {
+          this.filterArray = hospitalArrayByWard
           this.searchArray = hospitalArrayByWard
         }
       } else {
+        this.isFilterOn = false
+        this.filterArray = []
         this.searchArray = this.dataArray
       }
     }

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full'
+  },
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
@@ -14,11 +16,7 @@ const routes: Routes = [
     path: 'filters',
     loadChildren: () => import('./pages/filters/filters.module').then( m => m.FiltersPageModule)
   },
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-  },
+  
   
 ];
 
