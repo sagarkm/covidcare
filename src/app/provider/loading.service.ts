@@ -21,7 +21,8 @@ export class LoadingService {
   }
 
   hideLoader() {
-    this.loading.dismiss();
+    if(this.loading)
+      this.loading.dismiss();
     // this.loadingController.dismiss().then((res) => {
     //   console.log('Loading dismissed!', res);
     // }).catch((error) => {

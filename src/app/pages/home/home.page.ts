@@ -22,7 +22,6 @@ export class HomePage {
 
   dataArray: Hospital[] = [];
   searchArray: Hospital[] = [];
-  isSearchOn: Boolean = false;
   filterItems: object[] = [];
 
   constructor(
@@ -98,7 +97,6 @@ export class HomePage {
     let searchText = event.target.value;
     await this.loadingProvider.showLoader();
     if (searchText && searchText.trim() !== '') {
-      // this.isSearchOn = true
       this.searchArray = this.searchArray.filter((item: Hospital) => {
         return (item.hospital.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
       })
@@ -106,9 +104,9 @@ export class HomePage {
     this.loadingProvider.hideLoader();
   }
 
-  getHospitalsData(event?: any) {
+  async getHospitalsData(event?: any) {
     if (!event) {
-      this.loadingProvider.showLoader()
+      await this.loadingProvider.showLoader()
     }
     this.dataArray = []
     this.restProvider
@@ -213,16 +211,40 @@ export class HomePage {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     if (data) {
-      this.filterItems = data.filterData;
+      this.filterItems = data.filterData
+      this.searchArray = []
+      var hospitalArrayByWard: Hospital[]
+      var hospitalArray: Hospital[]
       if (data.filterData.length > 0) {
-        this.filterItems.forEach((items) => {
-          this.searchArray = this.dataArray.filter((hospitalItem: Hospital) => {
-            return (hospitalItem[items['filterType']] === items['filterValue']);
-          })
-        });
+        var ward = this.filterItems.filter(vendor => vendor['filterType'] === "ward")
+        if(ward.length > 0) {
+          hospitalArrayByWard = this.filterRecordsByType(ward, this.dataArray)
+        }
+        var service = this.filterItems.filter(vendor => vendor['filterType'] === "service")
+        if(service.length > 0) {
+          hospitalArray = this.filterRecordsByType(service, hospitalArrayByWard ? hospitalArrayByWard : this.dataArray)
+          this.searchArray = hospitalArray
+        } else {
+          this.searchArray = hospitalArrayByWard
+        }
       } else {
-        this.searchArray = this.dataArray;
+        this.searchArray = this.dataArray
       }
     }
+  }
+
+  filterRecordsByType(items: any, records: Hospital[]): Hospital[] {
+    var filterArray: Hospital[][] = []
+    var hospitalArray: Hospital[] = []
+    items.forEach((item) => {
+      let filteredData: Hospital[] = records.filter((hospitalItem: Hospital) => {
+        return (hospitalItem[item['filterType']] === item['filterValue'])
+      })
+      filterArray.push(filteredData)
+    })
+    for (let data of filterArray) {
+      hospitalArray = hospitalArray.concat(data)
+    }
+    return hospitalArray
   }
 }
