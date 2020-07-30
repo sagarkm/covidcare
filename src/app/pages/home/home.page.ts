@@ -180,7 +180,7 @@ export class HomePage {
           .then(res => console.log('Launched dialer!', res))
           .catch(err => console.log('Error launching dialer', err));
         } else {
-          window.open(`tel://${{data}}`)
+          window.open(`tel://${data}`)
         }
       }
     });
@@ -191,9 +191,9 @@ export class HomePage {
     event.stopPropagation()
     this.alert.presentConfirmDialog('Are you sure you want to send the email?').then((resp) => {
       if (resp) {
-        this.emailComposer.hasAccount().then((isValid: boolean) => {
-          if (isValid) {
-            if(this.platform.is("hybrid")) {
+        if(this.platform.is("hybrid")) {
+          this.emailComposer.hasAccount().then((isValid: boolean) => {
+            if (isValid) {
               let email = {
                 to: data,
                 subject: 'Covid Care',
@@ -201,11 +201,11 @@ export class HomePage {
                 isHtml: true
               }
               this.emailComposer.open(email);
-            } else {
-              window.open(`mailto://${{data}}?subject=Covid%20Care`)
             }
-          }
-        });
+          });
+        } else {
+          window.open(`mailto://${data}?subject=Covid%20Care`)
+        }
       }
     });
   }

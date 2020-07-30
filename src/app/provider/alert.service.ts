@@ -13,7 +13,7 @@ export class AlertService {
   async presentAlert(messageText: string) {
     this.hideEarlierMessages()
     const alert = await this.alertController.create({
-      header: 'Notification',
+      header: 'Covid Care',
       message: messageText,
       buttons: ['OK']
     });
@@ -25,7 +25,7 @@ export class AlertService {
     this.hideEarlierMessages()
     let messageText = status ? `<img src="/assets/img/network.png" class="card-alert">` : `<img src="/assets/img/no-network.png" class="card-alert">`
     const alert = await this.alertController.create({
-      header: 'Notification',
+      header: 'Covid Care',
       message: messageText,
       buttons: ['OK']
     });
@@ -36,7 +36,7 @@ export class AlertService {
   async presentConfirmDialog(messageText: string) {
     return new Promise(async (resolve, reject) => {
       let alert = await this.alertController.create({
-        header: 'Notification',
+        header: 'Covid Care',
         message: messageText,
         buttons: [
           {
