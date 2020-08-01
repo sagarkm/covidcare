@@ -50,51 +50,6 @@ export class HomePage {
     console.log(data)
   }
 
-  getHospital(objArr: String[]): Hospital {
-    var hospitalObj: Hospital = { serial: "", ward: "", service: "", hospital: "", address: "", pincode: "", latlong: "", beds: "", name: "", contact: "", email: "" }
-    for (var val of objArr) {
-      let key = val[0].charAt(0);
-      switch (key) {
-        case "A":
-          hospitalObj.serial = val[1]
-          break;
-        case "B":
-          hospitalObj.ward = val[1]
-          break;
-        case "C":
-          hospitalObj.service = val[1]
-          break;
-        case "D":
-          hospitalObj.hospital = val[1]
-          break;
-        case "E":
-          hospitalObj.address = val[1]
-          break;
-        case "F":
-          hospitalObj.pincode = val[1]
-          break;
-        case "G":
-          hospitalObj.latlong = val[1]
-          break;
-        case "H":
-          hospitalObj.beds = val[1]
-          break;
-        case "I":
-          hospitalObj.name = val[1]
-          break;
-        case "J":
-          hospitalObj.contact = val[1]
-          break;
-        case "K":
-          hospitalObj.email = val[1]
-          break;
-        default:
-          break;
-      }
-    }
-    return hospitalObj
-  }
-
   async getSearchItems(event: any) {
     if(this.isFilterOn) {
       this.searchArray = this.filterArray
@@ -105,7 +60,7 @@ export class HomePage {
     await this.loadingProvider.showLoader();
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Hospital) => {
-        return (item.hospital.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
+        return (item.hospitalName.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
       })
     }
     this.loadingProvider.hideLoader();
@@ -117,41 +72,33 @@ export class HomePage {
     }
     this.dataArray = []
     this.restProvider
-      .getData(this.global.HOSPITALS)
+      .getData(this.global.HOSPITALS_FINAL)
       .subscribe(
         (data: Hospitals) => {
           let entryArr: Entry[] = data.feed.entry;
-          let currentRow: number = 1;
-          let titleData = [];
           for (var val of entryArr) {
-            if (Number(val.gs$cell.row) == currentRow) {
-              titleData.push([val.title.$t, val.gs$cell.inputValue]);
-            } else {
-              this.dataArray.push(this.getHospital(titleData))
-              currentRow += 1
-              break;
-            }
+            var hospitalObj: Hospital = { serialNo: "", ward: "", serviceType: "", hospitalName: "", category: "" ,address: "", pincode: "", latlong: "", noOfBeds: "", contactName: "", contactNumber: "", emailId: "" }
+            hospitalObj.serialNo = val["gsx$sr.no."].$t
+            hospitalObj.ward = val.gsx$ward.$t
+            hospitalObj.serviceType = val.gsx$servicetype.$t
+            hospitalObj.hospitalName = val.gsx$nameofhospital.$t
+            hospitalObj.category = val.gsx$category.$t 
+            hospitalObj.address = val.gsx$address.$t
+            hospitalObj.pincode = val.gsx$pincode.$t
+            hospitalObj.latlong = val.gsx$latlong.$t
+            hospitalObj.noOfBeds = val["gsx$no.ofbeds"].$t
+            hospitalObj.serviceType = val.gsx$servicetype.$t
+            hospitalObj.contactName = val.gsx$contactname.$t
+            hospitalObj.contactNumber = val.gsx$contactnumber.$t
+            hospitalObj.emailId = val.gsx$emailid.$t
+            this.dataArray.push(hospitalObj)
           }
-          let rowData = []
-          for (var val of entryArr) {
-            if (Number(val.gs$cell.row) > 1 && currentRow == Number(val.gs$cell.row)) {
-              rowData.push([val.title.$t, val.gs$cell.inputValue]);
-            } else {
-              if (Number(val.gs$cell.row) > 1) {
-                this.dataArray.push(this.getHospital(rowData))
-                rowData = []
-                rowData.push([val.title.$t, val.gs$cell.inputValue]);
-                currentRow += 1
-              }
-            }
-          }
-          this.dataArray.shift();
+          this.searchArray = this.dataArray;
           if (event) {
             event.target.complete();
           } else {
             this.loadingProvider.hideLoader()
           }
-          this.searchArray = this.dataArray;
           //console.log(this.dataArray)
         },
         (err: HttpErrorResponse) => {
@@ -173,12 +120,13 @@ export class HomePage {
   openNumber(event: Event, data: string) {
     event.preventDefault()
     event.stopPropagation()
+    if(data.length == 0) return
     this.alert.presentConfirmDialog('Are you sure you want to call this number?').then((resp) => {
       if (resp) {
         if(this.platform.is("hybrid")) {
-        this.callNumber.callNumber(data, false)
-          .then(res => console.log('Launched dialer!', res))
-          .catch(err => console.log('Error launching dialer', err));
+          this.callNumber.callNumber(data, false)
+            .then(res => console.log('Launched dialer!', res))
+            .catch(err => console.log('Error launching dialer', err));
         } else {
           window.open(`tel://${data}`)
         }
@@ -189,6 +137,7 @@ export class HomePage {
   openEmail(event: Event, data: string) {
     event.preventDefault()
     event.stopPropagation()
+    if(data.length == 0) return
     this.alert.presentConfirmDialog('Are you sure you want to send the email?').then((resp) => {
       if (resp) {
         if(this.platform.is("hybrid")) {
@@ -233,7 +182,7 @@ export class HomePage {
         if(ward.length > 0) {
           hospitalArrayByWard = this.filterRecordsByType(ward, this.dataArray)
         }
-        var service = this.filterItems.filter(vendor => vendor['filterType'] === "service")
+        var service = this.filterItems.filter(vendor => vendor['filterType'] === "serviceType")
         if(service.length > 0) {
           hospitalArray = this.filterRecordsByType(service, hospitalArrayByWard ? hospitalArrayByWard : this.dataArray)
           this.filterArray = hospitalArray

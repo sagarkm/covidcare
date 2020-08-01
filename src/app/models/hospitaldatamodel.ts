@@ -1,13 +1,14 @@
 export interface Hospital {
-    serial: string
+    serialNo: string
     ward: string
-    service: string
-    hospital: string
+    serviceType: string
+    hospitalName: string
+    category: string
     address: string
     pincode: string
     latlong: string
-    beds: string
-    name: string
-    contact: string
-    email: string
+    noOfBeds: string
+    contactName: string
+    contactNumber: string
+    emailId: string
 }

@@ -7,27 +7,24 @@ export interface Hospitals {
 export interface Feed {
     xmlns:                   string;
     xmlns$openSearch:        string;
-    xmlns$batch:             string;
-    xmlns$gs:                string;
-    id:                      GsColCount;
-    updated:                 GsColCount;
+    xmlns$gsx:               string;
+    id:                      ID;
+    updated:                 ID;
     category:                Category[];
     title:                   Title;
     link:                    Link[];
     author:                  Author[];
-    openSearch$totalResults: GsColCount;
-    openSearch$startIndex:   GsColCount;
-    gs$rowCount:             GsColCount;
-    gs$colCount:             GsColCount;
+    openSearch$totalResults: ID;
+    openSearch$startIndex:   ID;
     entry:                   Entry[];
 }
 
 export interface Author {
-    name:  GsColCount;
-    email: GsColCount;
+    name:  ID;
+    email: ID;
 }
 
-export interface GsColCount {
+export interface ID {
     $t: string;
 }
 
@@ -37,13 +34,24 @@ export interface Category {
 }
 
 export interface Entry {
-    id:       GsColCount;
-    updated:  GsColCount;
-    category: Category[];
-    title:    Title;
-    content:  Title;
-    link:     Link[];
-    gs$cell:  GsCell;
+    id:                 ID;
+    updated:            ID;
+    category:           Category[];
+    title:              Title;
+    content:            Title;
+    link:               Link[];
+    "gsx$sr.no.":       ID;
+    gsx$ward:           ID;
+    gsx$servicetype:    ID;
+    gsx$nameofhospital: ID;
+    gsx$category:       ID;
+    gsx$address:        ID;
+    gsx$pincode:        ID;
+    gsx$latlong:        ID;
+    "gsx$no.ofbeds":    ID;
+    gsx$contactname:    ID;
+    gsx$contactnumber:  ID;
+    gsx$emailid:        ID;
 }
 
 export interface Title {
@@ -53,14 +61,6 @@ export interface Title {
 
 export enum TitleType {
     Text = "text",
-}
-
-export interface GsCell {
-    row:           string;
-    col:           string;
-    inputValue:    string;
-    $t:            string;
-    numericValue?: string;
 }
 
 export interface Link {

@@ -17,7 +17,7 @@ export class FiltersPage implements OnInit {
       id: 'ward',
       name: 'Ward'
     }, {
-      id: 'service',
+      id: 'serviceType',
       name: 'Service Type'
     }];
   selectedFilter = 'ward';
@@ -27,7 +27,6 @@ export class FiltersPage implements OnInit {
 
   ngOnInit() {
     let wards = _.uniqBy(this.hospitalList, 'ward');
-
     wards.forEach(wardItem => {
       let filters = {
         filterType: '',
@@ -43,17 +42,16 @@ export class FiltersPage implements OnInit {
       this.filterItems.push(filters);
     });
 
-    let serviceList = _.uniqBy(this.hospitalList, 'service');
-
+    let serviceList = _.uniqBy(this.hospitalList, 'serviceType');
     serviceList.forEach(serviceItem => {
       let filters = {
         filterType: '',
         filterValue: '',
         isChecked: false
       };
-      filters.filterType = 'service';
-      filters.filterValue = serviceItem.service;
-      let alreadyCheckedItem = _.find(this.filterData, { 'filterType': 'service', 'filterValue': serviceItem.service });
+      filters.filterType = 'serviceType';
+      filters.filterValue = serviceItem.serviceType;
+      let alreadyCheckedItem = _.find(this.filterData, { 'filterType': 'serviceType', 'filterValue': serviceItem.serviceType });
       if (alreadyCheckedItem) {
         filters.isChecked = true;
       }
@@ -77,7 +75,6 @@ export class FiltersPage implements OnInit {
 
   segmentChanged = (segmentData) => {
     if (segmentData.target.value === 'apply') {
-      // console.log('selectedFilterItems = ', this.filterItems);
       let filterData = _.filter(this.filterItems, { 'isChecked': true })
       this.modalController.dismiss({
         'filterData': filterData
