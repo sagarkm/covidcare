@@ -10,7 +10,7 @@ import { AlertService } from 'src/app/provider/alert.service'
 import { CallNumber } from '@ionic-native/call-number/ngx'
 import { EmailComposer } from '@ionic-native/email-composer/ngx'
 import { FiltersPage } from '../filters/filters.page'
-import { PLATFORM_TYPE, FILTER_TYPE, FILTER } from 'src/app/globals/app.enum'
+import { PLATFORM_TYPE, FILTER_TYPE, FILTER, SHEET } from 'src/app/globals/app.enum'
 
 @Component({
   selector: 'app-home',
@@ -72,25 +72,25 @@ export class HomePage {
     }
     this.dataArray = []
     this.restProvider
-      .getData(AppGlobals.HOSPITALS_FINAL)
+      .getData(AppGlobals.API_ENDPOINT(SHEET.HOSPITALS))
       .subscribe(
         (data: Hospitals) => {
           let entryArr: Entry[] = data.feed.entry
-          for (var val of entryArr) {
+          for (var entry of entryArr) {
             var hospitalObj: Hospital = { serialNo: '', ward: '', serviceType: '', hospitalName: '', category: '' ,address: '', pincode: '', latlong: '', noOfBeds: '', contactName: '', contactNumber: '', emailId: '' }
-            hospitalObj.serialNo = val['gsx$sr.no.'].$t
-            hospitalObj.ward = val.gsx$ward.$t
-            hospitalObj.serviceType = val.gsx$servicetype.$t
-            hospitalObj.hospitalName = val.gsx$nameofhospital.$t
-            hospitalObj.category = val.gsx$category.$t 
-            hospitalObj.address = val.gsx$address.$t
-            hospitalObj.pincode = val.gsx$pincode.$t
-            hospitalObj.latlong = val.gsx$latlong.$t
-            hospitalObj.noOfBeds = val['gsx$no.ofbeds'].$t
-            hospitalObj.serviceType = val.gsx$servicetype.$t
-            hospitalObj.contactName = val.gsx$contactname.$t
-            hospitalObj.contactNumber = val.gsx$contactnumber.$t
-            hospitalObj.emailId = val.gsx$emailid.$t
+            hospitalObj.serialNo = entry['gsx$sr.no.'].$t
+            hospitalObj.ward = entry.gsx$ward.$t
+            hospitalObj.serviceType = entry.gsx$servicetype.$t
+            hospitalObj.hospitalName = entry.gsx$nameofhospital.$t
+            hospitalObj.category = entry.gsx$category.$t 
+            hospitalObj.address = entry.gsx$address.$t
+            hospitalObj.pincode = entry.gsx$pincode.$t
+            hospitalObj.latlong = entry.gsx$latlong.$t
+            hospitalObj.noOfBeds = entry['gsx$no.ofbeds'].$t
+            hospitalObj.serviceType = entry.gsx$servicetype.$t
+            hospitalObj.contactName = entry.gsx$contactname.$t
+            hospitalObj.contactNumber = entry.gsx$contactnumber.$t
+            hospitalObj.emailId = entry.gsx$emailid.$t
             this.dataArray.push(hospitalObj)
           }
           this.searchArray = this.dataArray
@@ -102,12 +102,13 @@ export class HomePage {
           //console.log(this.dataArray)
         },
         (err: HttpErrorResponse) => {
+          debugger
           if (event) {
             event.target.complete()
           } else {
             this.loadingProvider.hideLoader()
           }
-          this.alert.presentAlert(err.error.message)
+          this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)
 
         }
       )
@@ -128,7 +129,7 @@ export class HomePage {
             .then(res => console.log('Launched dialer!', res))
             .catch(err => console.log('Error launching dialer', err))
         } else {
-          window.open(`tel://${data}`)
+          window.open(AppGlobals.TEL_TO(data))
         }
       }
     })
@@ -153,7 +154,7 @@ export class HomePage {
             }
           })
         } else {
-          window.open(`mailto:${data}?subject=Covid%20Care`)
+          window.open(AppGlobals.EMAIL_TO(data))
         }
       }
     })

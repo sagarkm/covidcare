@@ -31,11 +31,7 @@ export class FiltersPage implements OnInit {
   ngOnInit() {
     let wards = _.uniqBy(this.hospitalList, FILTER_TYPE.WARD)
     wards.forEach(wardItem => {
-      let filters: FilterData = {
-        filterType: '',
-        filterValue: '',
-        isChecked: false
-      }
+      let filters: FilterData = { filterType: '', filterValue: '', isChecked: false }
       filters.filterType = FILTER_TYPE.WARD
       filters.filterValue = wardItem.ward
       let alreadyCheckedItem = _.find(this.filterData, { 'filterType': FILTER_TYPE.WARD, 'filterValue': wardItem.ward })
@@ -47,11 +43,7 @@ export class FiltersPage implements OnInit {
 
     let serviceList = _.uniqBy(this.hospitalList, FILTER_TYPE.SERVICE)
     serviceList.forEach(serviceItem => {
-      let filters: FilterData = {
-        filterType: '',
-        filterValue: '',
-        isChecked: false
-      }
+      let filters: FilterData = { filterType: '', filterValue: '', isChecked: false }
       filters.filterType = FILTER_TYPE.SERVICE
       filters.filterValue = serviceItem.serviceType
       let alreadyCheckedItem = _.find(this.filterData, { 'filterType': FILTER_TYPE.SERVICE, 'filterValue': serviceItem.serviceType })

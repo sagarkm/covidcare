@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs'
-import { retry, catchError, map } from 'rxjs/operators'
+import { retry, catchError, map, timeout } from 'rxjs/operators'
 import { AppGlobals } from '../globals/app.global'
 import { AlertService } from './alert.service'
 import { Platform } from '@ionic/angular'
@@ -39,7 +39,8 @@ export class ApiService {
       return this.http
         .get<any>(endpointUrl)
         .pipe(
-          retry(AppGlobals.RETRY_COUNT),
+          timeout(AppGlobals.API_TIMEOUT),
+          retry(AppGlobals.API_RETRY_COUNT),
           catchError(err => {
             throw err
           })
@@ -48,7 +49,7 @@ export class ApiService {
   }
 
   // Post Data
-  createItem(endpointUrl: string, data: any): Observable<any> {
+  postData(endpointUrl: string, data: any): Observable<any> {
     if (this.platform.is(PLATFORM_TYPE.HYBRID) && this.network.getNetworkStatus() == 'none') {
       return new Observable(observer => {
         setTimeout(() => {
@@ -59,10 +60,8 @@ export class ApiService {
       return this.http
         .post<any>(endpointUrl, JSON.stringify(data), this.httpOptions)
         .pipe(
-          map(res => {
-            return res.json()
-          }),
-          retry(AppGlobals.RETRY_COUNT),
+          timeout(AppGlobals.API_TIMEOUT),
+          retry(AppGlobals.API_RETRY_COUNT),
           catchError(err => {
             throw err
           })
