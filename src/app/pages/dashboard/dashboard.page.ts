@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'src/app/provider/alert.service';
 import { NetworkService } from 'src/app/provider/network.service';
+import { AppGlobals } from 'src/app/globals/app.global';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,8 +12,8 @@ export class DashboardPage implements OnInit {
   
   constructor(
       private alert: AlertService, 
-      private network: NetworkService,
-    ) { }
+      private network: NetworkService
+  ) { }
 
   ngOnInit() {
     this.network.registerNetworkEvents()
@@ -23,7 +24,7 @@ export class DashboardPage implements OnInit {
   }
 
   cityClicked() {
-    this.alert.presentAlert('Currently we support only Mumbai !!')
+    this.alert.presentAlert(AppGlobals.CITY_SUPPORT)
   }
 
 }

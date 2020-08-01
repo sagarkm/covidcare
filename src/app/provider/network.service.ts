@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Network } from '@ionic-native/network/ngx';
-import { AlertService } from './alert.service';
+import { Injectable } from '@angular/core'
+import { Network } from '@ionic-native/network/ngx'
+import { AlertService } from './alert.service'
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +19,14 @@ export class NetworkService {
         this.lastnetworkType = false
         this.alert.presentNonetworkAlert(false)
       }
-    });
+    })
 
     this.connectSubscription = this.network.onConnect().subscribe(() => {
       if(this.lastnetworkType == false) {
         this.lastnetworkType = true
         this.alert.presentNonetworkAlert(true)
       }
-    });
+    })
   }
 
   getNetworkStatus() : string  {

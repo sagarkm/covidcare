@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError, map } from 'rxjs/operators';
-import { AppGlobals } from '../globals/app.global';
-import { Network } from '@ionic-native/network/ngx';
-import { AlertService } from './alert.service';
-import { Platform } from '@ionic/angular';
-import { NetworkService } from './network.service';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
+import { Observable, throwError } from 'rxjs'
+import { retry, catchError, map } from 'rxjs/operators'
+import { AppGlobals } from '../globals/app.global'
+import { AlertService } from './alert.service'
+import { Platform } from '@ionic/angular'
+import { NetworkService } from './network.service'
+import { PLATFORM_TYPE } from '../globals/app.enum'
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class ApiService {
 
   constructor(
     private http: HttpClient, 
-    private global: AppGlobals,
     private alert: AlertService,
     private network: NetworkService,
     public platform: Platform
@@ -30,19 +29,19 @@ export class ApiService {
   
   // Get Data
   getData(endpointUrl: string): Observable<any> {
-    if (this.platform.is('hybrid') && this.network.getNetworkStatus() == 'none') {
+    if (this.platform.is(PLATFORM_TYPE.HYBRID) && this.network.getNetworkStatus() == 'none') {
       return new Observable(observer => {
         setTimeout(() => {
-          observer.error({ error: { message: 'Please check your network connection and try again.' } });
-        }, 1000);
-      });
+          observer.error({ error: { message: AppGlobals.NO_NETWORK } })
+        }, 1000)
+      })
     } else {
       return this.http
         .get<any>(endpointUrl)
         .pipe(
-          retry(this.global.RETRY_COUNT),
+          retry(AppGlobals.RETRY_COUNT),
           catchError(err => {
-            throw err;
+            throw err
           })
         )
     }
@@ -50,22 +49,22 @@ export class ApiService {
 
   // Post Data
   createItem(endpointUrl: string, data: any): Observable<any> {
-    if (this.platform.is('hybrid') && this.network.getNetworkStatus() == 'none') {
+    if (this.platform.is(PLATFORM_TYPE.HYBRID) && this.network.getNetworkStatus() == 'none') {
       return new Observable(observer => {
         setTimeout(() => {
-          observer.error({ error: { message: 'Please check your network connection and try again.' } });
-        }, 1000);
-      });
+          observer.error({ error: { message: AppGlobals.NO_NETWORK } })
+        }, 1000)
+      })
     } else {
       return this.http
         .post<any>(endpointUrl, JSON.stringify(data), this.httpOptions)
         .pipe(
           map(res => {
-            return res.json();
+            return res.json()
           }),
-          retry(this.global.RETRY_COUNT),
+          retry(AppGlobals.RETRY_COUNT),
           catchError(err => {
-            throw err;
+            throw err
           })
         )
     }
