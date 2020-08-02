@@ -37,26 +37,26 @@
           <ion-grid>
             <ion-row>
               <ion-col size="8">
-                {{row.hospitalName}}
+                <span class="text-bold text-title">{{row.hospitalName}}</span>
               </ion-col>
               <ion-col>
                 <div class="ion-text-end">
-                  {{row.serviceType}} - {{row.ward}}
+                  <span class="text-bold text-subtitle">{{row.serviceType}} - {{row.ward}}</span>
                 </div>
               </ion-col>
             </ion-row>
             <ion-row>
-              <ion-col size="8">
-                {{row.address}}
+              <ion-col size=11>
+                <span class="text-regular text-subtitle">{{row.address}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
-              <ion-col size="0.7">
+              <ion-col size="1">
                 <!-- <ion-icon name="medkit-outline" class="icon"> </ion-icon> -->
                 <ion-img class="card-image" [src]="'assets/img/doctor.png'"></ion-img>
               </ion-col>
-              <ion-col size="9">
-                <span class="text">{{row.contactName}}</span>
+              <ion-col size="8.8">
+                <span class="text-bold text-link">{{row.contactName}}</span>
               </ion-col>
               <ion-col size="0.7">
                 <!-- <ion-icon name="bed-outline" class="icon"></ion-icon> -->
@@ -64,27 +64,27 @@
               </ion-col>
               <ion-col>
                 <div class="ion-text-center">
-                  <span class="text">{{row.noOfBeds}}</span>
+                  <span class="text-bold text-link">{{row.noOfBeds}}</span>
                 </div>
               </ion-col>
             </ion-row>
             <ion-row (click)="openEmail($event, row.emailId)">
-              <ion-col size="0.7">
+              <ion-col size="1">
                 <!-- <ion-icon name="mail-outline" class="icon"></ion-icon> -->
                 <ion-img class="card-image" [src]="'assets/img/mail.png'"></ion-img>
               </ion-col>
               <ion-col>
-                <span class="text">{{row.emailId}}</span>
+                <span class="text-bold text-link">{{row.emailId}}</span>
               </ion-col>
 
             </ion-row>
             <ion-row (click)="openNumber($event, row.contactNumber)">
-              <ion-col size="0.7">
+              <ion-col size="1">
                 <!-- <ion-icon name="call-outline" class="icon"></ion-icon> -->
                 <ion-img class="card-image" [src]="'assets/img/phone.png'"></ion-img>
               </ion-col>
               <ion-col>
-                <span class="text">{{row.contactNumber}}</span>
+                <span class="text-bold text-link">{{row.contactNumber}}</span>
               </ion-col>
             </ion-row>
           </ion-grid>

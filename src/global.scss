@@ -24,3 +24,41 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+@font-face {
+  font-family: 'Baloo-Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./assets/fonts/Baloo-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Baloo-Medium';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./assets/fonts/Baloo-Medium.ttf');
+}
+
+.text-regular { 
+  font-family: "Baloo-Regular"; 
+  color: #616161;
+}
+
+.text-bold { 
+  font-family: "Baloo-Medium"; 
+  color: #616161;
+}
+
+.text-title {
+  font-size: x-large;
+}
+
+.text-subtitle {
+  font-size: larger;
+}
+
+.text-link {
+  font-size: large;
+  vertical-align: baseline;
+}

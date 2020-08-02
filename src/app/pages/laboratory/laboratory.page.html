@@ -32,12 +32,12 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <span class="text-custom1">{{row.labName}}</span>
+                <span class="text-bold text-title">{{row.labName}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
-                {{row.address}}
+                <span class="text-regular text-subtitle">{{row.address}}</span>
               </ion-col>
             </ion-row>
             <ion-row (click)="openNumber($event, row.contactNumber)">
@@ -46,7 +46,7 @@
                 <ion-img class="card-image" [src]="'assets/img/phone.png'"></ion-img>
               </ion-col>
               <ion-col>
-                <span class="text-custom2">{{row.contactNumber}}</span>
+                <span class="text-bold text-link">{{row.contactNumber}}</span>
               </ion-col>
             </ion-row>
           </ion-grid>
