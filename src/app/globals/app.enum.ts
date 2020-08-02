@@ -1,7 +1,7 @@
 
 export enum SHEET {
   HOSPITALS = '1',
-  LABORATORY = '2'
+  LABS = '2'
 }
 
 export enum PLATFORM_TYPE {

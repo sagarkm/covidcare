@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'filters',
     loadChildren: () => import('./pages/filters/filters.module').then( m => m.FiltersPageModule)
   },
+  {
+    path: 'laboratory',
+    loadChildren: () => import('./pages/laboratory/laboratory.module').then( m => m.LaboratoryPageModule)
+  },
   
   
 ];
