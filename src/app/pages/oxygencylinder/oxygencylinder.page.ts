@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { Entry, Labs } from 'src/app/models/laboratorymodel';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
-import { AppGlobals } from 'src/app/globals/app.global';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Platform } from '@ionic/angular';
-import { PLATFORM_TYPE, SHEET } from 'src/app/globals/app.enum'
 import { CallNumber } from '@ionic-native/call-number/ngx';
-import { Laboratory } from 'src/app/models/laboratorydatamodel';
+import { Cylinder } from 'src/app/models/oxygencylinderdatamodel';
+import { HttpErrorResponse } from '@angular/common/http';
+import { PLATFORM_TYPE, SHEET } from 'src/app/globals/app.enum';
+import { AppGlobals } from 'src/app/globals/app.global';
+import { OxygenCylinders, Entry } from 'src/app/models/oxygencylindermodel';
 
 @Component({
-  selector: 'app-laboratory',
-  templateUrl: './laboratory.page.html',
-  styleUrls: ['./laboratory.page.scss'],
+  selector: 'app-oxygencylinder',
+  templateUrl: './oxygencylinder.page.html',
+  styleUrls: ['./oxygencylinder.page.scss'],
 })
-export class LaboratoryPage implements OnInit {
+export class OxygencylinderPage implements OnInit {
 
-  dataArray: Laboratory[] = []
-  searchArray: Laboratory[] = []
+  dataArray: Cylinder[] = []
+  searchArray: Cylinder[] = []
 
   constructor(
     public loadingProvider: LoadingService,
@@ -29,7 +29,7 @@ export class LaboratoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getLaboratoryData()
+    this.getCylinderData()
   }
 
   ngOnDestroy() {
@@ -37,28 +37,27 @@ export class LaboratoryPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Laboratory) {
+  openLabDetails(data: Cylinder) {
     console.log(data)
   }
 
-  async getLaboratoryData(event?: any) {
+  async getCylinderData(event?: any) {
     if (!event) {
       await this.loadingProvider.showLoader()
     }
     this.dataArray = []
     this.restProvider
-      .getData(AppGlobals.API_ENDPOINT(SHEET.LABS))
+      .getData(AppGlobals.API_ENDPOINT(SHEET.CYLINDERS))
       .subscribe(
-        (data: Labs) => {
+        (data: OxygenCylinders) => {
           let entryArr: Entry[] = data.feed.entry
           for (var entry of entryArr) {
-            var labObj: Laboratory = { serialNo: '', labName: '', address: '', zipcode: '', contactNumber: '' }
-            labObj.serialNo = entry["gsx$sr.no."].$t
-            labObj.labName = entry.gsx$laboratory.$t
-            labObj.address = entry.gsx$address.$t
-            labObj.zipcode = entry.gsx$zipcode.$t
-            labObj.contactNumber = entry.gsx$contact.$t
-            this.dataArray.push(labObj)
+            var cylinderObj: Cylinder = { serialNo: '', name: '', person: '', contactNumber: '' }
+            cylinderObj.serialNo = entry["gsx$sr.no."].$t
+            cylinderObj.name = entry.gsx$name.$t
+            cylinderObj.person = entry.gsx$person.$t
+            cylinderObj.contactNumber = entry.gsx$contact.$t
+            this.dataArray.push(cylinderObj)
           }
           this.searchArray = this.dataArray
           if (event) {
@@ -75,13 +74,12 @@ export class LaboratoryPage implements OnInit {
             this.loadingProvider.hideLoader()
           }
           this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)
-
         }
       )
   }
 
   listRefresh(event: any) {
-    this.getLaboratoryData(event)
+    this.getCylinderData(event)
   }
 
   async getSearchItems(event: any) {
@@ -89,8 +87,8 @@ export class LaboratoryPage implements OnInit {
     let searchText = event.target.value
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
-      this.searchArray = this.searchArray.filter((item: Laboratory) => {
-        return (item.labName.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+      this.searchArray = this.searchArray.filter((item: Cylinder) => {
+        return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()

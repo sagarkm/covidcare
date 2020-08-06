@@ -102,7 +102,6 @@ export class HomePage {
           //console.log(this.dataArray)
         },
         (err: HttpErrorResponse) => {
-          debugger
           if (event) {
             event.target.complete()
           } else {

@@ -20,6 +20,18 @@ const routes: Routes = [
     path: 'laboratory',
     loadChildren: () => import('./pages/laboratory/laboratory.module').then( m => m.LaboratoryPageModule)
   },
+  {
+    path: 'ambulance',
+    loadChildren: () => import('./pages/ambulance/ambulance.module').then( m => m.AmbulancePageModule)
+  },
+  {
+    path: 'controlroom',
+    loadChildren: () => import('./pages/controlroom/controlroom.module').then( m => m.ControlroomPageModule)
+  },
+  {
+    path: 'oxygencylinder',
+    loadChildren: () => import('./pages/oxygencylinder/oxygencylinder.module').then( m => m.OxygencylinderPageModule)
+  },
   
   
 ];
