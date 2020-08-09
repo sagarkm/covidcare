@@ -9,10 +9,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="mainContainer">
+<ion-content class="background">
   <div class="filters">
     <div class="filterTypes columnContainer">
-      <ion-list *ngFor="let filter of filterTypes" (click)="setFilterItems(filter.id)">
+      <ion-list class="item-content" *ngFor="let filter of filterTypes" (click)="setFilterItems(filter.id)">
         <ion-item [ngClass]="{'selectedFilter': filter.id === selectedFilter}">
           <ion-grid>
             <ion-row>
@@ -28,7 +28,7 @@
       </ion-list>
     </div>
     <div class="filterItems columnContainer">
-      <ion-list *ngFor="let items of selectedFilterItems" lines='none'>
+      <ion-list class="item-content" *ngFor="let items of selectedFilterItems" lines='none'>
         <ion-item>
           <ion-checkbox slot="start" [(ngModel)]="items.isChecked"></ion-checkbox>
           <ion-label>{{items.filterValue}}</ion-label>

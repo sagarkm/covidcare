@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color='danger'>
+    <ion-title>Information</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeClicked()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none">
+    <ion-item class="item-space">
+      <span class="text-bold card-title"><b>CCC2 :</b> Covid Care Centres : For mild symptomatic and asymptomatic patients</span>
+    </ion-item>
+    <ion-item class="item-space">
+      <span class="text-bold card-title"><b>DCHC : </b>Dedicated Covid Health Care Centres : For patients clinically assigned as moderate</span>
+    </ion-item>
+    <ion-item class="item-space">
+      <span class="text-bold card-title"><b>DCH : </b>Dedicated Covid Hospitals : For patients clinically assigned as severe</span>
+    </ion-item>
+    <ion-item class="item-space">
+      <!-- <ion-row> -->
+        <span class="text-bold card-title"><b>Last Updated: </b></span><ion-datetime class="text-bold card-title" displayFormat="DD MMM YYYY" value={{updatedAt}}></ion-datetime>
+      <!-- </ion-row> -->
+    </ion-item>
+    <ion-item class="item-space">
+      <span class="text-bold card-title"><b>Disclaimer: </b>Info here are got from trusted sources. But we are not responsible for any mis information here.
+      </span>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -50,6 +50,18 @@
   color: #616161;
 }
 
+.card-title {
+  @media (max-width: 576px) {
+    font-size: 1.1rem;
+  }
+  @media (min-width: 577px) and (max-width: 819px) {
+    font-size: 1.5rem;
+  }
+  @media (min-width: 820px) {
+    font-size: 1.6rem;
+  }
+}
+
 .text-title {
   font-size: larger;
 }
@@ -62,3 +74,18 @@
   font-size: medium;
   vertical-align: baseline;
 }
+
+.background-color {
+  color: #989aa2;
+}
+
+.item-content {
+  background-color: #E0E0E0;
+}
+
+#imgPlacement {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  object-fit: cover;
+ }

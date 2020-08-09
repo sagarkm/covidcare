@@ -14,7 +14,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content color="background">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Laboratory List</ion-title>
@@ -23,10 +23,9 @@
   <ion-refresher slot="fixed" (ionRefresh)="listRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <img *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"
-    style="align-items: center">
+  <img *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement">
   <div>
-    <ion-list lines="none" *ngFor="let row of searchArray" (click)="openLabDetails(row)">
+    <ion-list class="item-content" lines="none" *ngFor="let row of searchArray" (click)="openLabDetails(row)">
       <ion-card>
         <ion-item>
           <ion-grid>
@@ -41,9 +40,9 @@
               </ion-col>
             </ion-row>
             <ion-row (click)="openNumber($event, row.contactNumber)">
-              <ion-col size="1">
+              <ion-col size-lg="0.3" size-md="0.5" size="1">
                 <!-- <ion-icon name="call-outline" class="icon"></ion-icon> -->
-                <ion-img class="card-image" [src]="'assets/img/phone.png'"></ion-img>
+                <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>
               </ion-col>
               <ion-col>
                 <span class="text-bold text-link">{{row.contactNumber}}</span>

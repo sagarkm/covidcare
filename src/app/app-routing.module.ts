@@ -32,6 +32,14 @@ const routes: Routes = [
     path: 'oxygencylinder',
     loadChildren: () => import('./pages/oxygencylinder/oxygencylinder.module').then( m => m.OxygencylinderPageModule)
   },
+  {
+    path: 'officers',
+    loadChildren: () => import('./pages/officers/officers.module').then( m => m.OfficersPageModule)
+  },
+  {
+    path: 'info',
+    loadChildren: () => import('./pages/info/info.module').then( m => m.InfoPageModule)
+  },
   
   
 ];

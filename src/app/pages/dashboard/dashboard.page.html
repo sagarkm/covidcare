@@ -9,54 +9,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content color="background">
   <ion-grid>
     <ion-row>
-      <ion-col>
-        <ion-card class="menu-card" routerLink="/home">
-          <ion-img class="card-image" [src]="'assets/img/hospital.png'"></ion-img>
+      <ion-col size-lg="3" size-md="4" size-sm="6" size="6" *ngFor="let row of dashArray">
+        <ion-card class="menu-card" routerLink={{row.route}}>
+          <ion-img class="card-image" src={{row.icon}}></ion-img>
           <ion-card-title class='card-title'>
-            <span class="text-bold text-title">Hospitals</span>
+            <span class="text-bold card-title">{{row.title}}</span>
           </ion-card-title>
         </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card class="menu-card" routerLink="/laboratory">
-          <ion-img class="card-image" [src]="'assets/img/laboratory.png'"></ion-img>
-          <ion-card-title class='card-title'>
-            <span class="text-bold text-title">Laboratory</span>
-          </ion-card-title>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-card class="menu-card" routerLink="/ambulance">
-          <ion-img class="card-image" [src]="'assets/img/ambulance.png'"></ion-img>
-          <ion-card-title class='card-title'>
-            <span class="text-bold text-title">Ambulance</span>
-          </ion-card-title>
-        </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card class="menu-card" routerLink="/controlroom">
-          <ion-img class="card-image" [src]="'assets/img/controlroom.png'"></ion-img>
-          <ion-card-title class='card-title'>
-            <span class="text-bold text-title">Control Room</span>
-          </ion-card-title>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-card class="menu-card" routerLink="/oxygencylinder">
-          <ion-img class="card-image" [src]="'assets/img/cylinder.png'"></ion-img>
-          <ion-card-title class='card-title'>
-            <span class="text-bold text-title">Oxygen Cylinder</span>
-          </ion-card-title>
-        </ion-card>
-      </ion-col>
-      <ion-col>
       </ion-col>
     </ion-row>
   </ion-grid>

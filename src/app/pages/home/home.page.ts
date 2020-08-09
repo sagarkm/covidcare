@@ -11,6 +11,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx'
 import { EmailComposer } from '@ionic-native/email-composer/ngx'
 import { FiltersPage } from '../filters/filters.page'
 import { PLATFORM_TYPE, FILTER_TYPE, FILTER, SHEET } from 'src/app/globals/app.enum'
+import { InfoPage } from '../info/info.page'
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ export class HomePage {
   filterArray: Hospital[] = []
   filterItems: object[] = []
   isFilterOn: boolean = false
+  lastUpdated: string
 
   constructor(
     public loadingProvider: LoadingService,
@@ -75,6 +77,7 @@ export class HomePage {
       .getData(AppGlobals.API_ENDPOINT(SHEET.HOSPITALS))
       .subscribe(
         (data: Hospitals) => {
+          this.lastUpdated = data.feed.updated.$t
           let entryArr: Entry[] = data.feed.entry
           for (var entry of entryArr) {
             var hospitalObj: Hospital = { serialNo: '', ward: '', serviceType: '', hospitalName: '', category: '' ,address: '', pincode: '', latlong: '', noOfBeds: '', contactName: '', contactNumber: '', emailId: '' }
@@ -108,7 +111,6 @@ export class HomePage {
             this.loadingProvider.hideLoader()
           }
           this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)
-
         }
       )
   }
@@ -157,6 +159,17 @@ export class HomePage {
         }
       }
     })
+  }
+
+  openInfoScreen = async () => {
+    const modal = await this.modalController.create({
+      component: InfoPage,
+      componentProps: {
+        updatedAt: this.lastUpdated,
+      },
+      showBackdrop: false
+    })
+    await modal.present()
   }
 
   openFilterScreen = async () => {

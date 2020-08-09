@@ -4,7 +4,9 @@ export enum SHEET {
   LABS = '2',
   AMBULANCES = '3',
   ROOMS = '4',
-  CYLINDERS = '5'
+  CYLINDERS = '5',
+  OFFICERS = '6',
+  AREA = '7'
 }
 
 export enum PLATFORM_TYPE {

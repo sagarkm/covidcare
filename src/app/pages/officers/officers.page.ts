@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
+import { Officer } from 'src/app/models/officerdatamodel';
 import { AlertService } from 'src/app/provider/alert.service';
-import { Platform } from '@ionic/angular';
-import { CallNumber } from '@ionic-native/call-number/ngx';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Entry, Officers } from 'src/app/models/officersmodel';
 import { AppGlobals } from 'src/app/globals/app.global';
+import { Platform } from '@ionic/angular';
 import { SHEET, PLATFORM_TYPE } from 'src/app/globals/app.enum';
-import { Room } from 'src/app/models/controlroomdatamodel';
-import { ControlRooms, Entry } from 'src/app/models/controlroommodel';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 @Component({
-  selector: 'app-controlroom',
-  templateUrl: './controlroom.page.html',
-  styleUrls: ['./controlroom.page.scss'],
+  selector: 'app-officers',
+  templateUrl: './officers.page.html',
+  styleUrls: ['./officers.page.scss'],
 })
-export class ControlroomPage implements OnInit {
+export class OfficersPage implements OnInit {
 
-  dataArray: Room[] = []
-  searchArray: Room[] = []
+  dataArray: Officer[] = []
+  searchArray: Officer[] = []
 
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
     private alert: AlertService,
     private platform: Platform,
-    private callNumber: CallNumber
+    private emailComposer: EmailComposer
   ) { }
 
   ngOnInit() {
@@ -37,7 +37,7 @@ export class ControlroomPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Room) {
+  openLabDetails(data: Officer) {
     console.log(data)
   }
 
@@ -47,17 +47,17 @@ export class ControlroomPage implements OnInit {
     }
     this.dataArray = []
     this.restProvider
-      .getData(AppGlobals.API_ENDPOINT(SHEET.ROOMS))
+      .getData(AppGlobals.API_ENDPOINT(SHEET.OFFICERS))
       .subscribe(
-        (data: ControlRooms) => {
+        (data: Officers) => {
           let entryArr: Entry[] = data.feed.entry
           for (var entry of entryArr) {
-            var roomObj: Room = { serialNo: '', ward: '', area: '', contactNumber: '' }
-            roomObj.serialNo = entry["gsx$sr.no."].$t
-            roomObj.ward = entry.gsx$ward.$t
-            // roomObj.area = entry.gsx$area.$t
-            // roomObj.contactNumber = entry.gsx$controlroomnumber.$t
-            this.dataArray.push(roomObj)
+            var officerObj: Officer = { serialNo: '', officer: '', respFor: '', emailId: '' }
+            officerObj.serialNo = entry["gsx$sr.no."].$t
+            officerObj.officer = entry.gsx$officer.$t
+            officerObj.respFor = entry.gsx$responsiblefor.$t
+            officerObj.emailId = entry.gsx$email.$t
+            this.dataArray.push(officerObj)
           }
           this.searchArray = this.dataArray
           if (event) {
@@ -87,28 +87,36 @@ export class ControlroomPage implements OnInit {
     let searchText = event.target.value
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
-      this.searchArray = this.searchArray.filter((item: Room) => {
-        return (item.ward.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+      this.searchArray = this.searchArray.filter((item: Officer) => {
+        return (item.officer.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
   }
 
-  openNumber(event: Event, data: string) {
+  openEmail(event: Event, data: string) {
     event.preventDefault()
     event.stopPropagation()
     if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL).then((resp) => {
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data, false)
-            .then(res => console.log('Launched dialer!', res))
-            .catch(err => console.log('Error launching dialer', err))
+          this.emailComposer.hasAccount().then((isValid: boolean) => {
+            if (isValid) {
+              let email = {
+                to: data,
+                subject: AppGlobals.ALERT_TITLE,
+                body: '',
+                isHtml: true
+              }
+              this.emailComposer.open(email)
+            }
+          })
         } else {
-          window.open(AppGlobals.TEL_TO(data))
+          window.open(AppGlobals.EMAIL_TO(data))
         }
       }
     })
-  } 
+  }
 
 }
