@@ -99,7 +99,7 @@ export class LaboratoryPage implements OnInit {
   openNumber(event: Event, data: Laboratory) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.labName.length == 0) return
+    if(data.contactNumber.length == 0) return
     this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(data.labName)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
