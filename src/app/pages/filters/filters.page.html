@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="background">
+<ion-content>
   <div class="filters">
     <div class="filterTypes columnContainer">
       <ion-list class="item-content" *ngFor="let filter of filterTypes" (click)="setFilterItems(filter.id)">
@@ -20,7 +20,7 @@
                 <ion-img class="card-image" [src]="'assets/img/ward.png'"></ion-img>
               </ion-col>
               <ion-col>
-                <ion-label> {{filter.name}} </ion-label>
+                <span class="text-bold text-title">{{filter.name}}</span>
               </ion-col>
             </ion-row>
           </ion-grid>  
@@ -28,16 +28,19 @@
       </ion-list>
     </div>
     <div class="filterItems columnContainer">
-      <ion-list class="item-content" *ngFor="let items of selectedFilterItems" lines='none'>
+      <ion-list class="filter-val" *ngFor="let items of selectedFilterItems" lines="none">
         <ion-item>
           <ion-checkbox slot="start" [(ngModel)]="items.isChecked"></ion-checkbox>
-          <ion-label>{{items.filterValue}}</ion-label>
+          <span class="text-bold text-title">{{items.filterValue}}</span>
         </ion-item>
+        <ion-row>
+          <ion-label class="text-bold text-title filter-val-padding">{{items.area}}</ion-label>
+        </ion-row>
       </ion-list>
     </div>
   </div>
 </ion-content>
-<ion-footer class="">
+<ion-footer>
   <ion-toolbar>
     <ion-segment (ionChange)="segmentChanged($event)">
       <ion-segment-button value="CLOSE">

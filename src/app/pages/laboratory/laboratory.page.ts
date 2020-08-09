@@ -96,18 +96,18 @@ export class LaboratoryPage implements OnInit {
     this.loadingProvider.hideLoader()
   }
 
-  openNumber(event: Event, data: string) {
+  openNumber(event: Event, data: Laboratory) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL).then((resp) => {
+    if(data.labName.length == 0) return
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(data.labName)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data, false)
+          this.callNumber.callNumber(data.contactNumber, false)
             .then(res => console.log('Launched dialer!', res))
             .catch(err => console.log('Error launching dialer', err))
         } else {
-          window.open(AppGlobals.TEL_TO(data))
+          window.open(AppGlobals.TEL_TO(data.contactNumber))
         }
       }
     })

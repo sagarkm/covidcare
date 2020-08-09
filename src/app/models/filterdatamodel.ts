@@ -6,5 +6,6 @@ export interface FilterType {
 export interface FilterData {
     filterType: string
     filterValue: string
+    area: string
     isChecked: boolean
 }

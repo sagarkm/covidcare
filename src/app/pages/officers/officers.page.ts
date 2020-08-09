@@ -94,17 +94,17 @@ export class OfficersPage implements OnInit {
     this.loadingProvider.hideLoader()
   }
 
-  openEmail(event: Event, data: string) {
+  openEmail(event: Event, data: Officer) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL).then((resp) => {
+    if(data.emailId.length == 0) return
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL(data.officer)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
           this.emailComposer.hasAccount().then((isValid: boolean) => {
             if (isValid) {
               let email = {
-                to: data,
+                to: data.emailId,
                 subject: AppGlobals.ALERT_TITLE,
                 body: '',
                 isHtml: true
@@ -113,7 +113,7 @@ export class OfficersPage implements OnInit {
             }
           })
         } else {
-          window.open(AppGlobals.EMAIL_TO(data))
+          window.open(AppGlobals.EMAIL_TO(data.emailId))
         }
       }
     })

@@ -31,15 +31,16 @@
           <ion-grid>
             <ion-row>
               <ion-col size="8">
-                <span class="text-bold text-title">{{row.area}}</span>
+                <span *ngIf="row.misc == ''" class="text-bold text-title">{{row.area}}</span>
+                <span *ngIf="row.misc != ''" class="text-bold text-subtitle">{{row.misc}}</span>
               </ion-col>
               <ion-col>
                 <div class="ion-text-end">
-                  <span class="text-bold text-subtitle">{{row.ward}}</span>
+                  <span *ngIf="row.ward != 'Others'" class="text-bold text-subtitle">{{row.ward}}</span>
                 </div>
               </ion-col>
             </ion-row>
-            <ion-row (click)="openNumber($event, row.contactNumber)">
+            <ion-row (click)="openNumber($event, row)">
               <ion-col size-lg="0.3" size-md="0.5" size="1">
                 <!-- <ion-icon name="call-outline" class="icon"></ion-icon> -->
                 <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>

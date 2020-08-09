@@ -34,16 +34,16 @@ export interface Category {
 }
 
 export interface Entry {
-    id:                    ID;
-    updated:               ID;
-    category:              Category[];
-    title:                 Title;
-    content:               Title;
-    link:                  Link[];
-    "gsx$sr.no.":          ID;
-    gsx$ward:              ID;
-    gsx$area:              ID;
-    gsx$controlroomnumber: ID;
+    id:           ID;
+    updated:      ID;
+    category:     Category[];
+    title:        Title;
+    content:      Title;
+    link:         Link[];
+    "gsx$sr.no.": ID;
+    gsx$ward:     ID;
+    gsx$number:   ID;
+    gsx$misc:     ID;
 }
 
 export interface Title {

@@ -39,7 +39,7 @@
                 <span class="text-regular text-subtitle">{{row.address}}</span>
               </ion-col>
             </ion-row>
-            <ion-row (click)="openNumber($event, row.contactNumber)">
+            <ion-row (click)="openNumber($event, row)">
               <ion-col size-lg="0.3" size-md="0.5" size="1">
                 <!-- <ion-icon name="call-outline" class="icon"></ion-icon> -->
                 <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>

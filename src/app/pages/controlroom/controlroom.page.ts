@@ -9,6 +9,8 @@ import { AppGlobals } from 'src/app/globals/app.global';
 import { SHEET, PLATFORM_TYPE } from 'src/app/globals/app.enum';
 import { Room } from 'src/app/models/controlroomdatamodel';
 import { ControlRooms, Entry } from 'src/app/models/controlroommodel';
+import { Areas } from 'src/app/models/areamodel';
+import { Area } from 'src/app/models/areadatamodel';
 
 @Component({
   selector: 'app-controlroom',
@@ -19,6 +21,7 @@ export class ControlroomPage implements OnInit {
 
   dataArray: Room[] = []
   searchArray: Room[] = []
+  areaArray: Area[]
 
   constructor(
     public loadingProvider: LoadingService,
@@ -37,8 +40,37 @@ export class ControlroomPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Room) {
+  openLabDetails(data: Area) {
     console.log(data)
+  }
+
+  getAreaData() {
+    this.areaArray = []
+    this.restProvider
+      .getData(AppGlobals.API_ENDPOINT(SHEET.AREA))
+      .subscribe(
+        (data: Areas) => {
+          let entryArr = data.feed.entry
+          for (var entry of entryArr) {
+            var areaObj: Area = { serialNo: '', ward: '', area: '' }
+            areaObj.serialNo = entry["gsx$sr.no."].$t
+            areaObj.ward = entry.gsx$ward.$t
+            areaObj.area = entry.gsx$area.$t
+            this.areaArray.push(areaObj)
+          }
+          for (var row of this.dataArray) {
+            for (var area of this.areaArray) {
+              if(row.ward == area.ward) {
+                row.area = area.area
+              }
+            }
+          }
+          this.searchArray = this.dataArray
+        },
+        (err: HttpErrorResponse) => {
+          this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)
+        }
+      )
   }
 
   async getControlRoomData(event?: any) {
@@ -52,14 +84,15 @@ export class ControlroomPage implements OnInit {
         (data: ControlRooms) => {
           let entryArr: Entry[] = data.feed.entry
           for (var entry of entryArr) {
-            var roomObj: Room = { serialNo: '', ward: '', area: '', contactNumber: '' }
+            var roomObj: Room = { serialNo: '', ward: '', area: '', misc: '', contactNumber: '' }
             roomObj.serialNo = entry["gsx$sr.no."].$t
             roomObj.ward = entry.gsx$ward.$t
-            // roomObj.area = entry.gsx$area.$t
-            // roomObj.contactNumber = entry.gsx$controlroomnumber.$t
+            roomObj.contactNumber = entry.gsx$number.$t
+            roomObj.misc = entry.gsx$misc.$t
             this.dataArray.push(roomObj)
           }
           this.searchArray = this.dataArray
+          this.getAreaData()
           if (event) {
             event.target.complete()
           } else {
@@ -94,18 +127,19 @@ export class ControlroomPage implements OnInit {
     this.loadingProvider.hideLoader()
   }
 
-  openNumber(event: Event, data: string) {
+  openNumber(event: Event, data: Room) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL).then((resp) => {
+    if(data.contactNumber.length == 0) return
+    let recipient = data.area ? data.area : data.misc
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(recipient)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data, false)
+          this.callNumber.callNumber(data.contactNumber, false)
             .then(res => console.log('Launched dialer!', res))
             .catch(err => console.log('Error launching dialer', err))
         } else {
-          window.open(AppGlobals.TEL_TO(data))
+          window.open(AppGlobals.TEL_TO(data.contactNumber))
         }
       }
     })

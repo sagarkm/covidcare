@@ -119,34 +119,34 @@ export class HomePage {
     this.getHospitalsData(event)
   }
 
-  openNumber(event: Event, data: string) {
+  openNumber(event: Event, data: Hospital) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL).then((resp) => {
+    if(data.contactNumber.length == 0) return
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(data.hospitalName)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data, false)
+          this.callNumber.callNumber(data.contactNumber, false)
             .then(res => console.log('Launched dialer!', res))
             .catch(err => console.log('Error launching dialer', err))
         } else {
-          window.open(AppGlobals.TEL_TO(data))
+          window.open(AppGlobals.TEL_TO(data.contactNumber))
         }
       }
     })
   } 
 
-  openEmail(event: Event, data: string) {
+  openEmail(event: Event, data: Hospital) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL).then((resp) => {
+    if(data.emailId.length == 0) return
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL(data.hospitalName)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
           this.emailComposer.hasAccount().then((isValid: boolean) => {
             if (isValid) {
               let email = {
-                to: data,
+                to: data.emailId,
                 subject: AppGlobals.ALERT_TITLE,
                 body: '',
                 isHtml: true
@@ -155,7 +155,7 @@ export class HomePage {
             }
           })
         } else {
-          window.open(AppGlobals.EMAIL_TO(data))
+          window.open(AppGlobals.EMAIL_TO(data.emailId))
         }
       }
     })

@@ -96,18 +96,19 @@ export class AmbulancePage implements OnInit {
     this.loadingProvider.hideLoader()
   }
 
-  openNumber(event: Event, data: string) {
+  openNumber(event: Event, data: Ambulance) {
     event.preventDefault()
     event.stopPropagation()
-    if(data.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL).then((resp) => {
+    if(data.contactNumber.length == 0) return
+    let recipient = data.name ? data.name : data.person
+    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(recipient)).then((resp) => {
       if (resp) {
         if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data, false)
+          this.callNumber.callNumber(data.contactNumber, false)
             .then(res => console.log('Launched dialer!', res))
             .catch(err => console.log('Error launching dialer', err))
         } else {
-          window.open(AppGlobals.TEL_TO(data))
+          window.open(AppGlobals.TEL_TO(data.contactNumber))
         }
       }
     })

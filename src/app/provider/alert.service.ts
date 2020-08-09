@@ -37,8 +37,9 @@ export class AlertService {
   async presentConfirmDialog(messageText: string) {
     return new Promise(async (resolve, reject) => {
       let alert = await this.alertController.create({
-        header: AppGlobals.ALERT_TITLE,
-        message: messageText,
+        //header: AppGlobals.ALERT_TITLE,
+        header: messageText,
+        //message: messageText,
         buttons: [
           {
             text: 'Cancel',

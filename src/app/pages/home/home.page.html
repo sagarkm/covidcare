@@ -68,7 +68,7 @@
               </div>
             </ion-col>
           </ion-row> -->
-          <ion-row (click)="openEmail($event, row.emailId)">
+          <ion-row (click)="openEmail($event, row)">
             <ion-col size-lg="0.3" size-md="0.5" size="1">
               <ion-img *ngIf="row.emailId != ''" class="card-image" [src]="'assets/img/mail.png'"></ion-img>
             </ion-col>
@@ -84,7 +84,7 @@
               </div>
             </ion-col>
           </ion-row>
-          <!-- <ion-row (click)="openNumber($event, row.contactNumber)">
+          <!-- <ion-row (click)="openNumber($event, row)">
             <ion-col size-lg="0.3" size-md="0.5" size="1">
               <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>
             </ion-col>
