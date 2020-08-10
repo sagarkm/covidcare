@@ -7,11 +7,14 @@
   .columnContainer {
     display: flex;
     flex-direction: column;
-    flex: 1;
   }
 
   .filterTypes {
     border-right: 1px solid #cccccc;
+    flex: 1;
+  }
+  .filterItems {
+    flex: 2;
   }
 
   ion-list {

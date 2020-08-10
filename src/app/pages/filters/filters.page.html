@@ -14,16 +14,7 @@
     <div class="filterTypes columnContainer">
       <ion-list class="item-content" *ngFor="let filter of filterTypes" (click)="setFilterItems(filter.id)">
         <ion-item [ngClass]="{'selectedFilter': filter.id === selectedFilter}">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="2">
-                <ion-img class="card-image" [src]="'assets/img/ward.png'"></ion-img>
-              </ion-col>
-              <ion-col>
-                <span class="text-bold text-title">{{filter.name}}</span>
-              </ion-col>
-            </ion-row>
-          </ion-grid>  
+          <span class="text-bold text-title">{{filter.name}}</span>
         </ion-item>
       </ion-list>
     </div>
