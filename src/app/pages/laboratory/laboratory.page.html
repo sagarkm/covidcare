@@ -23,7 +23,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="listRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement">
+  <ion-img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"></ion-img>
   <div>
     <ion-list class="item-content" lines="none" *ngFor="let row of searchArray" (click)="openLabDetails(row)">
       <ion-card>
