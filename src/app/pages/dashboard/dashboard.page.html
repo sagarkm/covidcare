@@ -14,7 +14,7 @@
     <ion-row>
       <ion-col size-lg="3" size-md="4" size-sm="6" size="6" *ngFor="let row of dashArray">
         <ion-card class="menu-card" routerLink={{row.route}}>
-          <ion-img class="card-image" src={{row.icon}}></ion-img>
+          <ion-img alt={{row.title}} class="card-image" src={{row.icon}}></ion-img>
           <ion-card-title class='card-title'>
             <span class="text-bold card-title">{{row.title}}</span>
           </ion-card-title>

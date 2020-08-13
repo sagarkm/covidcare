@@ -18,7 +18,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="listRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <img *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"
+  <img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"
     style="align-items: center">
   <div>
     <ion-list class="item-content" lines="none" *ngFor="let row of searchArray">
