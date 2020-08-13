@@ -42,6 +42,20 @@
   font-display: swap;
 }
 
+
+ion-item {
+  --ion-background-color: transparent;
+  --ion-safe-area-right: 0;
+  --ion-safe-area-left: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+ion-card {
+  width: 100%;
+  --ion-background-color: white
+}
+
 .text-regular { 
   font-family: "Baloo-Regular"; 
   color: #616161;

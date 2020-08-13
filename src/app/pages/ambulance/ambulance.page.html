@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="danger">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="dashboard"></ion-back-button>
     </ion-buttons>
     <ion-title>
       Ambulance
@@ -15,48 +15,43 @@
 </ion-header>
 
 <ion-content color="background">
-  <!-- <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Ambulance List</ion-title>
-    </ion-toolbar>
-  </ion-header> -->
   <ion-refresher slot="fixed" (ionRefresh)="listRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"
     style="align-items: center"></ion-img>
   <div>
-    <ion-list class="item-content" lines="none" *ngFor="let row of searchArray" (click)="openLabDetails(row)">
-      <ion-card>
-        <ion-item>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <span class="text-bold text-title">{{row.name}}</span>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <span class="text-regular text-subtitle">{{row.person}}</span>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <span class="text-regular text-subtitle">{{row.address}}</span>
-              </ion-col>
-            </ion-row>
-            <ion-row (click)="openNumber($event, row)">
-              <ion-col size-lg="0.3" size-md="0.5" size="1">
-                <!-- <ion-icon name="call-outline" class="icon"></ion-icon> -->
-                <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>
-              </ion-col>
-              <ion-col>
-                <span class="text-bold text-link">{{row.contactNumber}}</span>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
+    <ion-list class="item-content" lines="none">
+      <ion-item *ngFor="let row of searchArray" (click)="openLabDetails(row)">
+        <ion-card>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <span class="text-bold text-title">{{row.name}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <span class="text-regular text-subtitle">{{row.person}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <span class="text-regular text-subtitle">{{row.address}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row (click)="openNumber($event, row)">
+            <ion-col size-lg="0.3" size-md="0.5" size="1">
+              <!-- <ion-icon name="call-outline" class="icon"></ion-icon> -->
+              <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>
+            </ion-col>
+            <ion-col>
+              <span class="text-bold text-link">{{row.contactNumber}}</span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-card>
+      </ion-item>
     </ion-list>
   </div>
 </ion-content>
