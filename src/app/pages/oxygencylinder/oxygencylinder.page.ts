@@ -35,9 +35,6 @@ export class OxygencylinderPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails() {
-  }
-
   async getCylinderData(event?: any) {
     if (!event) {
       await this.loadingProvider.showLoader()

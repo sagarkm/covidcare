@@ -45,7 +45,7 @@ export class HomePage {
     this.searchArray = []
   }
 
-  openHospitalDetails() {
+  openHospitalDetails(data) {
   }
 
   async getSearchItems(event: any) {

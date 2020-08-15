@@ -35,7 +35,7 @@ export class AmbulancePage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails() {
+  openAmbulanceDetails(data) {
   }
 
   async getAmbulanceData(event?: any) {

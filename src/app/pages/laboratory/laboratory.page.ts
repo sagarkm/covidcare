@@ -34,7 +34,7 @@ export class LaboratoryPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails() {
+  openLabDetails(data) {
   }
 
   async getLaboratoryData(event?: any) {

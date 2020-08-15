@@ -35,9 +35,6 @@ export class OfficersPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails() {
-  }
-
   async getControlRoomData(event?: any) {
     if (!event) {
       await this.loadingProvider.showLoader()

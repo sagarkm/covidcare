@@ -38,7 +38,7 @@ export class ControlroomPage implements OnInit {
     this.searchArray = []
   }
 
-  openRoomDetails() {
+  openRoomDetails(data) {
   }
 
   getAreaData() {
