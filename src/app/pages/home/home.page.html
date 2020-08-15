@@ -42,9 +42,12 @@
               </div>
             </ion-col>
           </ion-row>
-          <ion-row>
+          <ion-row  (click)="openMap($event, row)">
             <ion-col size=11>
-              <span class="text-regular text-subtitle">{{row.address}}</span>
+              <span class="text-regular text-subtitle">{{row.address}} - {{row.pincode}}</span>
+            </ion-col>
+            <ion-col size-lg="0.1" size-md="0.5" size="0.7">
+              <ion-img *ngIf="row.address != ''" class="card-image" [src]="'assets/img/map.png'"></ion-img>
             </ion-col>
           </ion-row>
           <!-- <ion-row>
@@ -65,7 +68,7 @@
           </ion-row> -->
           <ion-row (click)="openEmail($event, row)">
             <ion-col size-lg="0.3" size-md="0.5" size="1">
-              <ion-img *ngIf="row.emailId != ''" class="card-image" [src]="'assets/img/mail.png'"></ion-img>
+              <ion-img *ngIf="row.emailId != ''" class="card-image" [src]="'assets/img/email.png'"></ion-img>
             </ion-col>
             <ion-col size-lg="10.5" size-md="10" size="8">
               <span class="text-bold text-link">{{row.emailId}}</span>

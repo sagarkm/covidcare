@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
-import { Platform } from '@ionic/angular';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Cylinder } from 'src/app/models/oxygencylinderdatamodel';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PLATFORM_TYPE, SHEET } from 'src/app/globals/app.enum';
-import { AppGlobals } from 'src/app/globals/app.global';
+import { SHEET } from 'src/app/globals/app.enum';
 import { OxygenCylinders, Entry } from 'src/app/models/oxygencylindermodel';
+import { ContactService } from 'src/app/provider/contact.service';
+import { AppGlobals } from 'src/app/globals/app.global';
 
 @Component({
   selector: 'app-oxygencylinder',
@@ -23,9 +22,8 @@ export class OxygencylinderPage implements OnInit {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
-    private alert: AlertService,
-    private platform: Platform,
-    private callNumber: CallNumber
+    public contactProvider: ContactService,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
@@ -37,8 +35,7 @@ export class OxygencylinderPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Cylinder) {
-    console.log(data)
+  openLabDetails() {
   }
 
   async getCylinderData(event?: any) {
@@ -88,7 +85,8 @@ export class OxygencylinderPage implements OnInit {
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Cylinder) => {
-        return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        || item.person.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
@@ -98,17 +96,7 @@ export class OxygencylinderPage implements OnInit {
     event.preventDefault()
     event.stopPropagation()
     if(data.contactNumber.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(data.name)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data.contactNumber, false)
-            .then(res => console.log('Launched dialer!', res))
-            .catch(err => console.log('Error launching dialer', err))
-        } else {
-          window.open(AppGlobals.TEL_TO(data.contactNumber))
-        }
-      }
-    })
+    this.contactProvider.callPhoneNumber(data.name, data.contactNumber.split(' ').join(''))
   } 
 
 }

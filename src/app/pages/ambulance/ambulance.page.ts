@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Ambulances, Entry } from 'src/app/models/ambulancemodel';
 import { AppGlobals } from 'src/app/globals/app.global';
-import { PLATFORM_TYPE, SHEET } from 'src/app/globals/app.enum';
+import { SHEET } from 'src/app/globals/app.enum';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
-import { Platform } from '@ionic/angular';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Ambulance } from 'src/app/models/ambulancedatamodel';
+import { ContactService } from 'src/app/provider/contact.service';
 
 @Component({
   selector: 'app-ambulance',
@@ -23,9 +22,8 @@ export class AmbulancePage implements OnInit {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
-    private alert: AlertService,
-    private platform: Platform,
-    private callNumber: CallNumber
+    public contactProvider: ContactService,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
@@ -37,8 +35,7 @@ export class AmbulancePage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Ambulance) {
-    console.log(data)
+  openLabDetails() {
   }
 
   async getAmbulanceData(event?: any) {
@@ -51,7 +48,6 @@ export class AmbulancePage implements OnInit {
       .subscribe(
         (data: Ambulances) => {
           let entryArr: Entry[] = data.feed.entry
-          console.log(entryArr)
           for (var entry of entryArr) {
             var ambulanceObj: Ambulance = { serialNo: '', name: '', person: '', contactNumber: '', address: '' }
             ambulanceObj.serialNo = entry["gsx$sr.no."].$t
@@ -90,7 +86,8 @@ export class AmbulancePage implements OnInit {
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Ambulance) => {
-        return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        || item.address.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
@@ -101,17 +98,7 @@ export class AmbulancePage implements OnInit {
     event.stopPropagation()
     if(data.contactNumber.length == 0) return
     let recipient = data.name ? data.name : data.person
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(recipient)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data.contactNumber, false)
-            .then(res => console.log('Launched dialer!', res))
-            .catch(err => console.log('Error launching dialer', err))
-        } else {
-          window.open(AppGlobals.TEL_TO(data.contactNumber))
-        }
-      }
-    })
+    this.contactProvider.callPhoneNumber(recipient, data.contactNumber.split(' ').join(''))
   } 
 
 }

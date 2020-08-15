@@ -11,10 +11,10 @@ import { AppGlobals } from 'src/app/globals/app.global';
 export class DashboardPage implements OnInit {
   
   dashArray = [
+    {route: '/controlroom', icon: 'assets/img/controlroom.png', title: 'Control Room'},
     {route: '/home', icon: 'assets/img/hospital.png', title: 'Hospitals'},
     {route: '/laboratory', icon: 'assets/img/laboratory.png', title: 'Laboratory'},
     {route: '/ambulance', icon: 'assets/img/ambulance.png', title: 'Ambulance'},
-    {route: '/controlroom', icon: 'assets/img/controlroom.png', title: 'Control Room'},
     {route: '/oxygencylinder', icon: 'assets/img/cylinder.png', title: 'Oxygen Cylinder'},
     {route: '/officers', icon: 'assets/img/policeman.png', title: 'Officers'}
   ]

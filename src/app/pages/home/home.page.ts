@@ -3,15 +3,14 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AppGlobals } from 'src/app/globals/app.global'
 import { Hospitals, Entry } from 'src/app/models/hospitalmodel'
 import { Hospital } from 'src/app/models/hospitaldatamodel'
-import { IonContent, ModalController, Platform } from '@ionic/angular'
+import { IonContent, ModalController } from '@ionic/angular'
 import { LoadingService } from 'src/app/provider/loading.service'
 import { ApiService } from 'src/app/provider/api.service'
 import { AlertService } from 'src/app/provider/alert.service'
-import { CallNumber } from '@ionic-native/call-number/ngx'
-import { EmailComposer } from '@ionic-native/email-composer/ngx'
 import { FiltersPage } from '../filters/filters.page'
-import { PLATFORM_TYPE, FILTER_TYPE, FILTER, SHEET } from 'src/app/globals/app.enum'
+import { FILTER_TYPE, FILTER, SHEET } from 'src/app/globals/app.enum'
 import { InfoPage } from '../info/info.page'
+import { ContactService } from 'src/app/provider/contact.service'
 
 @Component({
   selector: 'app-home',
@@ -32,11 +31,9 @@ export class HomePage {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
+    public contactProvider: ContactService,
     private alert: AlertService,
-    private callNumber: CallNumber,
-    private emailComposer: EmailComposer,
-    private modalController: ModalController,
-    private platform: Platform
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -48,8 +45,7 @@ export class HomePage {
     this.searchArray = []
   }
 
-  openHospitalDetails(data: Hospital) {
-    console.log(data)
+  openHospitalDetails() {
   }
 
   async getSearchItems(event: any) {
@@ -62,7 +58,9 @@ export class HomePage {
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Hospital) => {
-        return (item.hospitalName.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.hospitalName.toLowerCase().indexOf(searchText.toLowerCase()) > -1 
+        || item.address.toLowerCase().indexOf(searchText.toLowerCase()) > -1 
+        || item.pincode.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
@@ -123,43 +121,25 @@ export class HomePage {
     event.preventDefault()
     event.stopPropagation()
     if(data.contactNumber.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(data.hospitalName)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data.contactNumber, false)
-            .then(res => console.log('Launched dialer!', res))
-            .catch(err => console.log('Error launching dialer', err))
-        } else {
-          window.open(AppGlobals.TEL_TO(data.contactNumber))
-        }
-      }
-    })
+    this.contactProvider.callPhoneNumber(data.hospitalName, data.contactNumber.split(' ').join(''))
   } 
 
   openEmail(event: Event, data: Hospital) {
     event.preventDefault()
     event.stopPropagation()
     if(data.emailId.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL(data.hospitalName)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.emailComposer.hasAccount().then((isValid: boolean) => {
-            if (isValid) {
-              let email = {
-                to: data.emailId,
-                subject: AppGlobals.ALERT_TITLE,
-                body: '',
-                isHtml: true
-              }
-              this.emailComposer.open(email)
-            }
-          })
-        } else {
-          window.open(AppGlobals.EMAIL_TO(data.emailId))
-        }
-      }
-    })
+    this.contactProvider.sendEmail(data.hospitalName, data.emailId)
   }
+
+  openMap(event: Event, data: Hospital) {
+    event.preventDefault()
+    event.stopPropagation()
+    if(data.address.length == 0) return
+    this.contactProvider.displayMap(data.hospitalName, data.hospitalName + ' ' + data.address + ' ' + data.pincode)
+  }
+
+
+
 
   openInfoScreen = async () => {
     const modal = await this.modalController.create({
