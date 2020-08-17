@@ -15,7 +15,7 @@ import { ContactService } from 'src/app/provider/contact.service';
   styleUrls: ['./officers.page.scss'],
 })
 export class OfficersPage implements OnInit {
-
+  globals = AppGlobals
   dataArray: Officer[] = []
   searchArray: Officer[] = []
 
@@ -79,14 +79,12 @@ export class OfficersPage implements OnInit {
   async getSearchItems(event: any) {
     this.searchArray = this.dataArray
     let searchText = event.target.value
-    await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Officer) => {
         return (item.officer.toLowerCase().indexOf(searchText.toLowerCase()) > -1
         || item.respFor.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
-    this.loadingProvider.hideLoader()
   }
 
   openEmail(event: Event, data: Officer) {

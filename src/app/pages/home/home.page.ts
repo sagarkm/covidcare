@@ -21,6 +21,7 @@ export class HomePage {
 
   @ViewChild(IonContent) content: IonContent
 
+  globals = AppGlobals
   dataArray: Hospital[] = []
   searchArray: Hospital[] = []
   filterArray: Hospital[] = []
@@ -55,7 +56,6 @@ export class HomePage {
       this.searchArray = this.dataArray
     }
     let searchText = event.target.value
-    await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Hospital) => {
         return (item.hospitalName.toLowerCase().indexOf(searchText.toLowerCase()) > -1 
@@ -63,7 +63,6 @@ export class HomePage {
         || item.pincode.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
-    this.loadingProvider.hideLoader()
   }
 
   async getHospitalsData(event?: any) {

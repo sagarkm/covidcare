@@ -16,6 +16,7 @@ import { AppGlobals } from 'src/app/globals/app.global';
 })
 export class OxygencylinderPage implements OnInit {
 
+  globals = AppGlobals
   dataArray: Cylinder[] = []
   searchArray: Cylinder[] = []
 
@@ -79,14 +80,12 @@ export class OxygencylinderPage implements OnInit {
   async getSearchItems(event: any) {
     this.searchArray = this.dataArray
     let searchText = event.target.value
-    await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Cylinder) => {
         return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
         || item.person.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
-    this.loadingProvider.hideLoader()
   }
 
   openNumber(event: Event, data: Cylinder) {

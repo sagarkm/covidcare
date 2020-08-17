@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { AppGlobals } from 'src/app/globals/app.global';
 
 @Component({
   selector: 'app-info',
@@ -8,6 +9,8 @@ import { ModalController } from '@ionic/angular';
 })
 export class InfoPage implements OnInit {
   @Input() updatedAt: string
+  
+  globals = AppGlobals
 
   constructor(private modalController: ModalController) { }
 

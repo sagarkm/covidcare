@@ -12,6 +12,8 @@ export class LoadingService {
   async showLoader() {
     this.loading = await this.loadingController.create({
       message: 'Please wait...',
+      cssClass:'custom-loader-class',
+      spinner: "circles",
       translucent: true,
       backdropDismiss: true
     })

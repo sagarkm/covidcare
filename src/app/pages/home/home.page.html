@@ -17,7 +17,7 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar type="text" debounce="500" (ionChange)="getSearchItems($event)"
+    <ion-searchbar type="text" debounce={{globals.DEBOUNCE}} (ionChange)="getSearchItems($event)"
       placeholder="Filter by Name, Ward, Zipcode & more..">
     </ion-searchbar>
   </ion-toolbar>
@@ -27,7 +27,8 @@
   <ion-refresher slot="fixed" (ionRefresh)="listRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"></ion-img>
+  <!-- <ion-img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"></ion-img> -->
+  <span *ngIf="searchArray.length == 0" class="text-bold text-title" id="searchPlacement">{{globals.NO_RESULTS}}</span>
   <ion-list  class="item-content" lines="none">
     <ion-item *ngFor="let row of searchArray" (click)="openHospitalDetails(row)">
       <ion-card>
@@ -43,11 +44,11 @@
             </ion-col>
           </ion-row>
           <ion-row  (click)="openMap($event, row)">
-            <ion-col size=11>
+            <ion-col size="10">
               <span class="text-regular text-subtitle">{{row.address}} - {{row.pincode}}</span>
             </ion-col>
-            <ion-col size-lg="0.1" size-md="0.5" size="0.7">
-              <ion-img *ngIf="row.address != ''" class="card-image" [src]="'assets/img/map.png'"></ion-img>
+            <ion-col size="2">
+              <ion-img *ngIf="row.address != ''" class="map-image" [src]="'assets/img/map.png'"></ion-img>
             </ion-col>
           </ion-row>
           <!-- <ion-row>
@@ -68,10 +69,10 @@
           </ion-row> -->
           <ion-row (click)="openEmail($event, row)">
             <ion-col size-lg="0.3" size-md="0.5" size="1">
-              <ion-img *ngIf="row.emailId != ''" class="card-image" [src]="'assets/img/email.png'"></ion-img>
+              <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>
             </ion-col>
             <ion-col size-lg="10.5" size-md="10" size="8">
-              <span class="text-bold text-link">{{row.emailId}}</span>
+              <span class="text-bold text-link">{{row.contactNumber}}</span>
             </ion-col>
             <ion-col size-lg="0.1" size-md="0.5" size="0.7">
               <ion-img *ngIf="row.noOfBeds != ''" class="card-image" [src]="'assets/img/bed.png'"></ion-img>
@@ -84,10 +85,10 @@
           </ion-row>
           <!-- <ion-row (click)="openNumber($event, row)">
             <ion-col size-lg="0.3" size-md="0.5" size="1">
-              <ion-img *ngIf="row.contactNumber != ''" class="card-image" [src]="'assets/img/phone.png'"></ion-img>
+              <ion-img *ngIf="row.emailId != ''" class="card-image" [src]="'assets/img/email.png'"></ion-img>
             </ion-col>
             <ion-col>
-              <span class="text-bold text-link">{{row.contactNumber}}</span>
+              <span class="text-bold text-link">{{row.emailId}}</span>
             </ion-col>
           </ion-row> -->
         </ion-grid>

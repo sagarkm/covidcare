@@ -16,6 +16,7 @@ import { ContactService } from 'src/app/provider/contact.service';
 })
 export class AmbulancePage implements OnInit {
 
+  globals = AppGlobals
   dataArray: Ambulance[] = []
   searchArray: Ambulance[] = []
 
@@ -83,14 +84,12 @@ export class AmbulancePage implements OnInit {
   async getSearchItems(event: any) {
     this.searchArray = this.dataArray
     let searchText = event.target.value
-    await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Ambulance) => {
         return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
         || item.address.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
-    this.loadingProvider.hideLoader()
   }
 
   openNumber(event: Event, data: Ambulance) {

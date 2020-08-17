@@ -79,7 +79,7 @@ ion-card {
 }
 
 .text-title {
-  font-size: larger;
+  font-size: 1.3rem;
 }
 
 .text-subtitle {
@@ -105,3 +105,20 @@ ion-card {
   margin: auto;
   object-fit: cover;
  }
+
+ #searchPlacement {
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  font-size: 2.5rem;
+ }
+
+ .custom-loader-class{
+  --spinner-color:#F94701;
+  font-size: 1.5rem;
+  font-family: "Baloo-Medium"; 
+  color: #616161;
+}
+
+ 
