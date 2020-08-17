@@ -26,6 +26,7 @@ export class HomePage {
   searchArray: Hospital[] = []
   filterArray: Hospital[] = []
   filterItems: object[] = []
+  isLoading: boolean = false
   isFilterOn: boolean = false
   lastUpdated: string
 
@@ -67,6 +68,7 @@ export class HomePage {
 
   async getHospitalsData(event?: any) {
     if (!event) {
+      this.isLoading = true
       await this.loadingProvider.showLoader()
     }
     this.dataArray = []
@@ -97,6 +99,7 @@ export class HomePage {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           //console.log(this.dataArray)
@@ -105,6 +108,7 @@ export class HomePage {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)

@@ -22,6 +22,7 @@ export class ControlroomPage implements OnInit {
   dataArray: Room[] = []
   searchArray: Room[] = []
   areaArray: Area[]
+  isLoading: boolean = false
 
   constructor(
     public loadingProvider: LoadingService,
@@ -73,6 +74,7 @@ export class ControlroomPage implements OnInit {
 
   async getControlRoomData(event?: any) {
     if (!event) {
+      this.isLoading = true
       await this.loadingProvider.showLoader()
     }
     this.dataArray = []
@@ -94,6 +96,7 @@ export class ControlroomPage implements OnInit {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           //console.log(this.searchArray)
@@ -102,6 +105,7 @@ export class ControlroomPage implements OnInit {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)

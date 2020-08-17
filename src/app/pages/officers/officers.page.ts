@@ -18,6 +18,7 @@ export class OfficersPage implements OnInit {
   globals = AppGlobals
   dataArray: Officer[] = []
   searchArray: Officer[] = []
+  isLoading: boolean = false
 
   constructor(
     public loadingProvider: LoadingService,
@@ -27,7 +28,7 @@ export class OfficersPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getControlRoomData()
+    this.getOfficersData()
   }
 
   ngOnDestroy() {
@@ -35,8 +36,9 @@ export class OfficersPage implements OnInit {
     this.searchArray = []
   }
 
-  async getControlRoomData(event?: any) {
+  async getOfficersData(event?: any) {
     if (!event) {
+      this.isLoading = true
       await this.loadingProvider.showLoader()
     }
     this.dataArray = []
@@ -57,6 +59,7 @@ export class OfficersPage implements OnInit {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           //console.log(this.dataArray)
@@ -65,6 +68,7 @@ export class OfficersPage implements OnInit {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)
@@ -73,7 +77,7 @@ export class OfficersPage implements OnInit {
   }
 
   listRefresh(event: any) {
-    this.getControlRoomData(event)
+    this.getOfficersData(event)
   }
 
   async getSearchItems(event: any) {

@@ -19,6 +19,7 @@ export class OxygencylinderPage implements OnInit {
   globals = AppGlobals
   dataArray: Cylinder[] = []
   searchArray: Cylinder[] = []
+  isLoading: boolean = false
 
   constructor(
     public loadingProvider: LoadingService,
@@ -38,6 +39,7 @@ export class OxygencylinderPage implements OnInit {
 
   async getCylinderData(event?: any) {
     if (!event) {
+      this.isLoading = true
       await this.loadingProvider.showLoader()
     }
     this.dataArray = []
@@ -58,6 +60,7 @@ export class OxygencylinderPage implements OnInit {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           //console.log(this.dataArray)
@@ -66,6 +69,7 @@ export class OxygencylinderPage implements OnInit {
           if (event) {
             event.target.complete()
           } else {
+            this.isLoading = false
             this.loadingProvider.hideLoader()
           }
           this.alert.presentAlert(err.error && err.error.message ? err.error.message : err.message)

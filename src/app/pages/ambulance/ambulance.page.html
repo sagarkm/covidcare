@@ -20,7 +20,7 @@
   </ion-refresher>
   <!-- <ion-img alt="No Results" *ngIf="searchArray.length == 0" src="/assets/img/no-results.jpg" id="imgPlacement"
     style="align-items: center"></ion-img> -->
-  <span *ngIf="searchArray.length == 0" class="text-bold text-title" id="searchPlacement">{{globals.NO_RESULTS}}</span>
+  <span *ngIf="searchArray.length == 0 && !isLoading" class="text-bold text-title" id="searchPlacement">{{globals.NO_RESULTS}}</span>
   <div>
     <ion-list class="item-content" lines="none">
       <ion-item *ngFor="let row of searchArray" (click)="openAmbulanceDetails(row)">
