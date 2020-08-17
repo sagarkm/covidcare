@@ -3,14 +3,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingService } from 'src/app/provider/loading.service';
 import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
-import { Platform } from '@ionic/angular';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 import { AppGlobals } from 'src/app/globals/app.global';
-import { SHEET, PLATFORM_TYPE } from 'src/app/globals/app.enum';
+import { SHEET } from 'src/app/globals/app.enum';
 import { Room } from 'src/app/models/controlroomdatamodel';
 import { ControlRooms, Entry } from 'src/app/models/controlroommodel';
 import { Areas } from 'src/app/models/areamodel';
 import { Area } from 'src/app/models/areadatamodel';
+import { ContactService } from 'src/app/provider/contact.service';
 
 @Component({
   selector: 'app-controlroom',
@@ -26,9 +25,8 @@ export class ControlroomPage implements OnInit {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
-    private alert: AlertService,
-    private platform: Platform,
-    private callNumber: CallNumber
+    public contactProvider: ContactService,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
@@ -40,8 +38,7 @@ export class ControlroomPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Area) {
-    console.log(data)
+  openRoomDetails(data) {
   }
 
   getAreaData() {
@@ -98,7 +95,7 @@ export class ControlroomPage implements OnInit {
           } else {
             this.loadingProvider.hideLoader()
           }
-          //console.log(this.dataArray)
+          //console.log(this.searchArray)
         },
         (err: HttpErrorResponse) => {
           if (event) {
@@ -121,7 +118,7 @@ export class ControlroomPage implements OnInit {
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Room) => {
-        return (item.ward.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.misc.toLowerCase().indexOf(searchText.toLowerCase()) > -1 || item.area.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
@@ -132,17 +129,7 @@ export class ControlroomPage implements OnInit {
     event.stopPropagation()
     if(data.contactNumber.length == 0) return
     let recipient = data.area ? data.area : data.misc
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(recipient)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data.contactNumber, false)
-            .then(res => console.log('Launched dialer!', res))
-            .catch(err => console.log('Error launching dialer', err))
-        } else {
-          window.open(AppGlobals.TEL_TO(data.contactNumber))
-        }
-      }
-    })
+    this.contactProvider.callPhoneNumber(recipient, data.contactNumber.split(' ').join(''))
   } 
 
 }

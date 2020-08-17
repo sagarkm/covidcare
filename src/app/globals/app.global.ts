@@ -5,6 +5,7 @@ export class AppGlobals {
   public static EMAIL_TO = (email: string) => `mailto:${email}?subject=Covid%20Care`
   public static ALERT_CALL = (recipient: string) => `Call ${recipient} ?`
   public static ALERT_EMAIL = (recipient: string) => `Email ${recipient} ?`
+  public static ALERT_MAP = (recipient: string) => `Map ${recipient} ?`
   public static API_TIMEOUT: number = 60000
   public static API_RETRY_COUNT: number = 2
   public static CITY_SUPPORT: string = 'Currently we support only Mumbai !!'    

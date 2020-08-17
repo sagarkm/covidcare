@@ -6,9 +6,8 @@ import { AlertService } from 'src/app/provider/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Entry, Officers } from 'src/app/models/officersmodel';
 import { AppGlobals } from 'src/app/globals/app.global';
-import { Platform } from '@ionic/angular';
-import { SHEET, PLATFORM_TYPE } from 'src/app/globals/app.enum';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { SHEET } from 'src/app/globals/app.enum';
+import { ContactService } from 'src/app/provider/contact.service';
 
 @Component({
   selector: 'app-officers',
@@ -23,9 +22,8 @@ export class OfficersPage implements OnInit {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
-    private alert: AlertService,
-    private platform: Platform,
-    private emailComposer: EmailComposer
+    public contactProvider: ContactService,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
@@ -35,10 +33,6 @@ export class OfficersPage implements OnInit {
   ngOnDestroy() {
     this.dataArray = []
     this.searchArray = []
-  }
-
-  openLabDetails(data: Officer) {
-    console.log(data)
   }
 
   async getControlRoomData(event?: any) {
@@ -88,7 +82,8 @@ export class OfficersPage implements OnInit {
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Officer) => {
-        return (item.officer.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.officer.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        || item.respFor.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
@@ -98,25 +93,7 @@ export class OfficersPage implements OnInit {
     event.preventDefault()
     event.stopPropagation()
     if(data.emailId.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_EMAIL(data.officer)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.emailComposer.hasAccount().then((isValid: boolean) => {
-            if (isValid) {
-              let email = {
-                to: data.emailId,
-                subject: AppGlobals.ALERT_TITLE,
-                body: '',
-                isHtml: true
-              }
-              this.emailComposer.open(email)
-            }
-          })
-        } else {
-          window.open(AppGlobals.EMAIL_TO(data.emailId))
-        }
-      }
-    })
+    this.contactProvider.sendEmail(data.officer, data.emailId)
   }
 
 }

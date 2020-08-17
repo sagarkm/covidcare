@@ -5,10 +5,9 @@ import { ApiService } from 'src/app/provider/api.service';
 import { AlertService } from 'src/app/provider/alert.service';
 import { AppGlobals } from 'src/app/globals/app.global';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Platform } from '@ionic/angular';
-import { PLATFORM_TYPE, SHEET } from 'src/app/globals/app.enum'
-import { CallNumber } from '@ionic-native/call-number/ngx';
+import { SHEET } from 'src/app/globals/app.enum'
 import { Laboratory } from 'src/app/models/laboratorydatamodel';
+import { ContactService } from 'src/app/provider/contact.service';
 
 @Component({
   selector: 'app-laboratory',
@@ -23,10 +22,8 @@ export class LaboratoryPage implements OnInit {
   constructor(
     public loadingProvider: LoadingService,
     public restProvider: ApiService,
-    private alert: AlertService,
-    private platform: Platform,
-    private callNumber: CallNumber
-  ) { }
+    public contactProvider: ContactService,
+    private alert: AlertService  ) { }
 
   ngOnInit() {
     this.getLaboratoryData()
@@ -37,8 +34,7 @@ export class LaboratoryPage implements OnInit {
     this.searchArray = []
   }
 
-  openLabDetails(data: Laboratory) {
-    console.log(data)
+  openLabDetails(data) {
   }
 
   async getLaboratoryData(event?: any) {
@@ -90,7 +86,8 @@ export class LaboratoryPage implements OnInit {
     await this.loadingProvider.showLoader()
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Laboratory) => {
-        return (item.labName.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.labName.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        || item.address.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
     this.loadingProvider.hideLoader()
@@ -100,17 +97,7 @@ export class LaboratoryPage implements OnInit {
     event.preventDefault()
     event.stopPropagation()
     if(data.contactNumber.length == 0) return
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(data.labName)).then((resp) => {
-      if (resp) {
-        if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
-          this.callNumber.callNumber(data.contactNumber, false)
-            .then(res => console.log('Launched dialer!', res))
-            .catch(err => console.log('Error launching dialer', err))
-        } else {
-          window.open(AppGlobals.TEL_TO(data.contactNumber))
-        }
-      }
-    })
+    this.contactProvider.callPhoneNumber(data.labName, data.contactNumber.split(' ').join(''))
   } 
 
 }

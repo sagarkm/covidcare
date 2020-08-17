@@ -107,9 +107,7 @@ export class FiltersPage implements OnInit {
 
   setFilterItems(filterType: string) {
     this.selectedFilter = filterType
-    console.log(this.filterItems)
     this.selectedFilterItems = _.filter(this.filterItems, { 'filterType': filterType })
-    console.log(this.selectedFilterItems)
     this.getAreaData()
   }
 
