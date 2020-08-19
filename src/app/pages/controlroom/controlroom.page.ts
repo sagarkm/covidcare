@@ -61,6 +61,7 @@ export class ControlroomPage implements OnInit {
             for (var area of this.areaArray) {
               if(row.ward == area.ward) {
                 row.area = area.area
+                row.ward = 'Ward ' + row.ward
               }
             }
           }
@@ -122,7 +123,7 @@ export class ControlroomPage implements OnInit {
     let searchText = event.target.value
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Room) => {
-        return (item.misc.toLowerCase().indexOf(searchText.toLowerCase()) > -1 || item.area.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+        return (item.misc.toLowerCase().indexOf(searchText.toLowerCase()) > -1 || item.ward.toLowerCase().indexOf(searchText.toLowerCase()) > -1 || item.area.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
   }

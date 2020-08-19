@@ -91,6 +91,7 @@ export class AmbulancePage implements OnInit {
     if (searchText && searchText.trim() !== '') {
       this.searchArray = this.searchArray.filter((item: Ambulance) => {
         return (item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        || item.person.toLowerCase().indexOf(searchText.toLowerCase()) > -1
         || item.address.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
       })
     }
