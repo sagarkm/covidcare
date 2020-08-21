@@ -43,12 +43,12 @@ export class ContactService {
   }
 
   callPhoneNumber(recipient: string, contactNumber: string) {
-    this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(recipient)).then((resp) => {
-      if (resp) {
-        if(contactNumber.includes(',')) {
-          var numbers = contactNumber.split(',')
-          this.callOptions(numbers)
-        } else {
+    if(contactNumber.includes(',')) {
+      var numbers = contactNumber.split(',')
+      this.callOptions(recipient, numbers)
+    } else {
+      this.alert.presentConfirmDialog(AppGlobals.ALERT_CALL(recipient)).then((resp) => {
+        if (resp) {
           if(this.platform.is(PLATFORM_TYPE.HYBRID)) {
             this.callNumber.callNumber(contactNumber, false)
               .then(res => console.log('Launched dialer!', res))
@@ -57,8 +57,8 @@ export class ContactService {
             window.open(AppGlobals.TEL_TO(contactNumber))
           }
         }
-      }
-    })
+      })
+    }
   }
 
   displayMap(recipient: string, address: string) {
@@ -73,9 +73,9 @@ export class ContactService {
     })
   }
 
-  async callOptions(numbers: string[]) { 
+  async callOptions(recipient: string, numbers: string[]) { 
     let opts = {
-      header: "Call Options",
+      header: "Call " +  recipient,
       buttons: this.createCallOptionsButtons(numbers),
     };
     const actionSheet = await this.actionSheetController.create(opts);
